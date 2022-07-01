@@ -6,7 +6,7 @@
 
 <script>
 
-import Home from "@/components/HomePage";
+import Home from "@/components/home/HomePage";
 
 export default {
   name: 'App',
@@ -19,6 +19,7 @@ export default {
 <style>
 body{
   margin: 0;
+  overflow:hidden
 }
 #app {
   width: 100%;

@@ -1,4 +1,7 @@
 import {GeoJSON, WFS} from 'ol/format';
+import {intersects} from 'ol/format/filter'
+import Feature from 'ol/Feature'
+
 
 let GetFeatureByWFS = function(serviceUrl,config)
 {
@@ -64,5 +67,7 @@ let GetIntersectionByWFS = function(serviceUrl,Geojson)
         });
 }
 
-var Get
+export default {
+    GetFeatureByWFS
+}
 

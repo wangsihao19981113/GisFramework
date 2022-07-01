@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import PrintMap from '../lib/PrintMap'
+import PrintMap from '../../lib/PrintMap'
 export default {
   name: "ToolBar",
   mounted() {

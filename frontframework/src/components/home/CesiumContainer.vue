@@ -1,15 +1,11 @@
 <template>
-  <div id="cesiumContainerBack">
+  <div id="cesiumContainerBack" style="height: 100%;width: 100%">
     <div id="cesiumContainer"/>
   </div>
 </template>
 
 <script>
-import canvas2image from "canvas2image";
-
-let Snow = require('../lib/weather/Snow/Snow.js')
-let IconOnGround = require('../lib/IconOnGround')
-import Canvas2Image from "canvas2image"
+let IconOnGround = require('../../lib/IconOnGround')
 
 export default {
   name: "CesiumContainer",
@@ -57,11 +53,11 @@ export default {
     });
     viewer.cesiumWidget.creditContainer.style.display = "none"
     window.viewer = viewer;
-    var IconOnGroundConfig = {
-      lng:112.5,lat:23,size:33000, rotation:30 ,image:window.location.origin+"/WeatherImage/snow.png"
-    }
-    var iconOnGround = new IconOnGround(IconOnGroundConfig)
-    var entity = iconOnGround.show(viewer);
+    // var IconOnGroundConfig = {
+    //   lng:112.5,lat:23,size:33000, rotation:30 ,image:window.location.origin+"/WeatherImage/snow.png"
+    // }
+    // var iconOnGround = new IconOnGround(IconOnGroundConfig)
+    // var entity = iconOnGround.show(viewer);
 
     // var configsnow = {
     //   lat:23,

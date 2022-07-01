@@ -11,9 +11,7 @@
 
 import topBar from './TopBar.vue'
 import CesiumContainer from "./CesiumContainer.vue";
-import ToolBar from "@/components/ToolBar";
-import SpatialComputing from "@/lib/SpatialComputing";
-
+import ToolBar from "@/components/home/ToolBar";
 
 export default {
   name: "Home",
