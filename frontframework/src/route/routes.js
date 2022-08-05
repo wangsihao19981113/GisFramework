@@ -30,6 +30,16 @@ export default new Router({
             name: 'ShiningLine',
             component:resolve => require(['@/components/example/LineStyle/ShiningLine'], resolve)
         },
+        {
+            path:'/ParabolaLine',
+            name:'ParabolaLine',
+            component:resolve => require(['@/components/example/LineStyle/ParabolaLine'], resolve)
+        },
+        {
+            path:'/PieChart',
+            name:'PieChart',
+            component:resolve => require(['@/components/example/StatisticalChart/PieChart'], resolve)
+        }
 
     ]
 })

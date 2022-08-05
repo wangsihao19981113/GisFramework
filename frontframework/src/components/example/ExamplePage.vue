@@ -83,8 +83,9 @@ let config = [
             url:"/ShiningLine"
           },
           {
-            name:"上升线",
-            img:"/Image/img.png"
+            name:"抛物线",
+            img:"/Image/Example/LineStyle/ParabolaLine.png",
+            url:"/ParabolaLine"
           }
         ]
       },
@@ -125,6 +126,22 @@ let config = [
         ]
       }
     ]
+  },
+  {
+    name:"统计",
+    id:"el_2",
+    second:[
+      {
+        name:"地图统计图表",
+        id:"el_2_1",
+        third:[
+          {
+            name:"饼图",
+            img:"/Image/Example/StatisticalChart/PieChart.png",
+            url:"/PieChart"
+          },
+        ]
+      },]
   }
 ]
 export default {
