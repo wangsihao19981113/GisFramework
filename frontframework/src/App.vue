@@ -6,12 +6,11 @@
 
 <script>
 
-import Home from "@/components/home/HomePage";
 
 export default {
   name: 'App',
-  components: {
-    Home,
+  mounted() {
+
   }
 }
 </script>

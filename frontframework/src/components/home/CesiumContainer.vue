@@ -6,6 +6,7 @@
 
 <script>
 let IconOnGround = require('../../lib/IconOnGround')
+import WallDiffuseMaterialProperty from "@/lib/MaterialProperty/WallDiffuseMaterialProperty";
 
 export default {
   name: "CesiumContainer",
@@ -53,6 +54,66 @@ export default {
     });
     viewer.cesiumWidget.creditContainer.style.display = "none"
     window.viewer = viewer;
+
+    WallDiffuseMaterialProperty.addWallDiffuseMaterial();
+
+    debugger;
+    viewer.entities.add({
+      name: "立体墙效果",
+      wall: {
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
+          -107.0,
+          43.0,
+          100000.0,
+          -97.0,
+          43.0,
+          100000.0,
+          -97.0,
+          40.0,
+          100000.0,
+          -107.0,
+          40.0,
+          100000.0,
+          -107.0,
+          43.0,
+          100000.0,
+        ]),
+        // 扩散墙材质
+        material: new Cesium.WallDiffuseMaterialProperty({
+          color: new Cesium.Color(1.0, 0.0, 0.0, 1.0)
+        }),
+      }
+    });
+
+
+    var data = {
+        lon:112,
+        lat:23,
+        r:50000,
+        scanColor:new Cesium.Color(0.0, 1.0, 0.0, 1),
+        interval:3000,
+    }
+
+    //ScanPostStage.addCircleScan(viewer,data)
+
+
+
+    var instance = new Cesium.GeometryInstance({
+      geometry : new Cesium.RectangleGeometry({
+        rectangle : Cesium.Rectangle.fromDegrees(-100.0, 20.0, -90.0, 30.0),
+        vertexFormat : Cesium.EllipsoidSurfaceAppearance.VERTEX_FORMAT
+      })
+    });
+
+
+    viewer.scene.primitives.add(new Cesium.Primitive({
+      geometryInstances : instance,
+      appearance : new Cesium.EllipsoidSurfaceAppearance({
+        material : Cesium.Material.fromType('Stripe')
+      })
+    }));
+
+
     // var IconOnGroundConfig = {
     //   lng:112.5,lat:23,size:33000, rotation:30 ,image:window.location.origin+"/WeatherImage/snow.png"
     // }
@@ -88,6 +149,6 @@ export default {
 
 <style scoped>
 #cesiumContainerBack{
-
+  position:absolute;
 }
 </style>

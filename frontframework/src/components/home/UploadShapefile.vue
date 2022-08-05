@@ -1,6 +1,5 @@
 <template>
-  <div class="PopupElement" v-drag>
-    <div><el-button icon="el-icon-close" class="closeButton" @click="CloseDialog"></el-button></div>
+  <div class="UploadShapefile">
     <div>
       <el-upload
           class="upload-demo uploadShape"
@@ -22,6 +21,7 @@
 </template>
 
 <script>
+
 export default {
   name: "UploadShapefile",
   data() {
@@ -43,9 +43,14 @@ export default {
       this.$message.warning(`当前限制选择 4 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     beforeRemove(file) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
+      return this.$confirm(`确定移除 ${ file.name }？`).then(function(res) {
+        console.log(res)
+      }).catch(function(err) {
+        console.log(err)
+      })
     },
     ShapeAnalysis(){
+      var self = this;
       var formData = new FormData();
 
       let hasprj = false;
@@ -87,33 +92,44 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         }
-        this.$axios.post('http://localhost:8080/shapefile/upload', formData, config)
+        this.$axios.post('http://localhost:8081/shapefile/upload', formData, config)
             .then(function (response) {
-              console.log(response);
+              var res = response.data;
+              if(res)
+              {
+                try{
+                  let FeatureCollection = {"type":"FeatureCollection","features":[]}
+                  for(let i = 0 ; i < res.length ; i++)
+                  {
+                    let Feature = {"type":"Feature","geometry":JSON.parse(res[i]["GeoJSON"])}
+                    FeatureCollection["features"].push(Feature);
+                  }
+                  let promise = Cesium.GeoJsonDataSource.load(FeatureCollection, {
+                    stroke: Cesium.Color.WHITE,
+                    fill: Cesium.Color.BLUE.withAlpha(0.3), //注意：颜色必须大写，即不能为blue
+                    strokeWidth: 5,
+                  });
+                  promise.then(function (dataSource){
+                    window.viewer.dataSources.add(dataSource);
+                    window.viewer.zoomTo(dataSource);
+                    let entities = dataSource.entities.values;
+                    for (let i = 0; i < entities.length; i++) {
+                      self.$store.state.EntityList.push({"source":dataSource.entities,"entity":entities[i],"type":"面","color":{"value":"rgba(255,255,0,1)","disable":false}});
+                    }
+                  })
+                }
+                catch (e) {
+                  console.log(e.toString())
+                }
+              }
             })
             .catch(function (error) {
               console.log(error);
             });
       }
-      if(isTheSameFileName){
-        var text = '上传文件名字相同，但缺少';
-        for(var i = 0 ; i < require.length ; i++)
-        {
-          if(i == require.length-1) {
-            text = text + require[i];
-          }
-          else{
-            text = text + require[i] + "、";
-          }
-        }
-        text = text + "文件"
-        this.$message.warning(text);
-        return "false";
-      }
-      else{
-        var text = '上传文件名字不同';
-        if(require.length > 0) {
-          text = text + "，同时缺少"
+      if(require.length>0) {
+        if (isTheSameFileName) {
+          var text = '上传文件名字相同，但缺少';
           for (var i = 0; i < require.length; i++) {
             if (i == require.length - 1) {
               text = text + require[i];
@@ -122,8 +138,23 @@ export default {
             }
           }
           text = text + "文件"
+          this.$message.warning(text);
+          return "false";
+        } else {
+          var text = '上传文件名字不同';
+          if (require.length > 0) {
+            text = text + "，同时缺少"
+            for (var i = 0; i < require.length; i++) {
+              if (i == require.length - 1) {
+                text = text + require[i];
+              } else {
+                text = text + require[i] + "、";
+              }
+            }
+            text = text + "文件"
+          }
+          this.$message.warning(text);
         }
-        this.$message.warning(text);
       }
     },
     CloseDialog(){
@@ -134,15 +165,18 @@ export default {
 </script>
 
 <style scoped>
+
+.UploadShapefile{
+  width: 300px;
+}
+
+
 .analysisButton{
   float: right;
   margin-top: 20px;
   /*padding: 7px 20px*/
 }
-.closeButton{
-  float:right;
-  padding:6px 10px;
-}
+
 .uploadShape{
   float:left
 }

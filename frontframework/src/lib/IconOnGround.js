@@ -22,7 +22,7 @@ IconOnGround.prototype.show = function(view,config){
             this.config = config;
         }
         this.viewer = view || window.viewer;
-        this.entity = viewer.entities.add({
+        this.entity = this.viewer.entities.add({
             name: "Rotating rectangle with rotating texture coordinate",
             position: Cesium.Cartesian3.fromDegrees(this.config.lng, this.config.lat, 0),
             ellipse: {

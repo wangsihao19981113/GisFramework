@@ -4,7 +4,8 @@ Vue.use(Vuex);
 let store = new Vuex.Store({
     state:{
         viewer:null,
-        ImportData:[]
+        EntityList:[],
+        IsShowImportDataView:false
     }
 })
 

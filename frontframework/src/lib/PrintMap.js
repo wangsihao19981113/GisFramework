@@ -1,6 +1,5 @@
 import Canvas2Image from "canvas2image"
 
-
 let getImg = function (viewer) {
     var canvas = viewer.scene.canvas;
     var imageWidth = 800;

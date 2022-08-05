@@ -1,21 +1,13 @@
-import {GeoJSON, WFS} from 'ol/format';
-import {intersects} from 'ol/format/filter'
-import Feature from 'ol/Feature'
+import axios from 'axios'
 
+let GetCql_Filter = function (filter)
+{
+
+}
 
 let GetFeatureByWFS = function(serviceUrl,config)
 {
-    const featureRequest = new WFS().writeGetFeature(config);
-    fetch(serviceUrl, {
-        method: 'POST',
-        body: new XMLSerializer().serializeToString(featureRequest),
-    })
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (json) {
-            const features = new GeoJSON().readFeatures(json);
-        });
+
 }
 
 let GetIntersectionByWFS = function(serviceUrl,Geojson)

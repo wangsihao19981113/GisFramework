@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import UploadShapefile from "@/components/home/UploadShapefile";
+import UploadShapefileView from "@/components/home/View/UploadShapefileView";
 import Router from 'vue-router'
 Vue.use(Router)
 export default new Router({
@@ -10,9 +10,26 @@ export default new Router({
             name: 'home',
             component: resolve => require(['@/components/home/HomePage'], resolve),
             children: [
-                { path: 'UploadShapefile', component: UploadShapefile },
+                { path: 'UploadShapefile', component: UploadShapefileView },
+                { path: 'ServiceQuery', component:resolve => require(['@/components/home/View/ServiceQueryView'], resolve) },
                 { path: 'register', component: () => import('@/components/home/HelloWorld.vue') }
             ]
-        }
+        },
+        {
+            path: '/example',
+            name: 'example',
+            component: resolve => require(['@/components/example/ExamplePage'], resolve),
+        },
+        {
+            path: '/Risingline',
+            name: 'Risingline',
+            component:resolve => require(['@/components/example/LineStyle/Risingline'], resolve)
+        },
+        {
+            path: '/ShiningLine',
+            name: 'ShiningLine',
+            component:resolve => require(['@/components/example/LineStyle/ShiningLine'], resolve)
+        },
+
     ]
 })

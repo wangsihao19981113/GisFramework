@@ -17,6 +17,12 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 
+
+//localhostPath定义
+Vue.prototype.localhostPath = window.location.origin;
+
+
+
 new Vue({
   axios,
   store,

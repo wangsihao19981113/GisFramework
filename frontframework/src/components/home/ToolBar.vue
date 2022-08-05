@@ -1,6 +1,7 @@
 <template>
   <div class="tool-bar">
     <el-button icon="el-icon-printer" @click="PrintMap($event)"></el-button>
+    <el-button icon="el-icon-printer" @click="OpenImportDataView($event)"></el-button>
   </div>
 </template>
 
@@ -14,6 +15,9 @@ export default {
   methods:{
     PrintMap(){
       PrintMap.printMap(window.viewer)
+    },
+    OpenImportDataView(){
+      this.$parent.$refs.ImportDataView.IsShowView = true;
     }
   }
 }
@@ -23,6 +27,7 @@ export default {
 .tool-bar{
   position:absolute;
   top:70px;
+  left:80%;
   z-index: 1;
 }
 </style>

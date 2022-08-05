@@ -1,9 +1,11 @@
 <template>
-  <div class="HomePage">
+  <div id="HomePage" class="HomePage">
     <router-view style="position:absolute;z-index: 2"></router-view>
     <topBar/>
     <ToolBar/>
     <CesiumContainer/>
+    <ImportDataView ref="ImportDataView"></ImportDataView>
+    <left-bar/>
   </div>
 </template>
 
@@ -12,23 +14,19 @@
 import topBar from './TopBar.vue'
 import CesiumContainer from "./CesiumContainer.vue";
 import ToolBar from "@/components/home/ToolBar";
+import ImportDataView from "@/components/home/View/ImportDataView";
+import LeftBar from "@/components/home/LeftBar";
 
 export default {
   name: "Home",
   components:{
+    LeftBar,
+    ImportDataView,
     topBar,
     CesiumContainer,
     ToolBar
   },
   mounted() {
-    //  var polygon = [{"x":1,"y":1,"z":0},{"x":1,"y":-1,"z":0},{"x":-1,"y":-1,"z":0},{"x":-1,"y":1,"z":0},{"x":1,"y":1,"z":0}];
-    //  //var line = [{"x":-1,"y":-1,"z":-1},{"x":-0.5,"y":-0.5,"z":-0.5}];
-    //   var line = [{"x":0,"y":0,"z":-1},{"x":0,"y":0,"z":1}];
-    // //{"x":-0.5,"y":-0.5,"z":-0.5}
-    //  console.log(SpatialComputing.IntersectionOFPolygonAndLine(polygon,line))
-
-
-
   }
 }
 </script>
@@ -36,8 +34,6 @@ export default {
 <style scoped>
 .PopupElement{
   background: white;
-  left: 100px;
-  top:100px;
   padding: 10px 20px 10px 20px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border-radius: 4px;
