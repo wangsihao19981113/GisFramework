@@ -39,7 +39,11 @@ export default new Router({
             path:'/PieChart',
             name:'PieChart',
             component:resolve => require(['@/components/example/StatisticalChart/PieChart'], resolve)
+        },
+        {
+            path:'/WaterNormal',
+            name:'WaterNormal',
+            component:resolve => require(['@/components/example/WaterStyle/WaterNormal'], resolve)
         }
-
     ]
 })

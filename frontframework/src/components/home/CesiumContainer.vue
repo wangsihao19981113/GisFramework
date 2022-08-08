@@ -54,7 +54,6 @@ export default {
     });
     viewer.cesiumWidget.creditContainer.style.display = "none"
     window.viewer = viewer;
-
     WallDiffuseMaterialProperty.addWallDiffuseMaterial();
 
     debugger;

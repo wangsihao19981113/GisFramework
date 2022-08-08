@@ -49,21 +49,6 @@ export default {
   },
   mounted() {
     this._3DPie = PieEntity3D(config3D,window.viewer);
-    //中心点
-    // let position = [112,25]
-    // let pointlist = this.GenerateRandomPosition(position,10)
-    // let source = new Cesium.CustomDataSource()
-    // for(let i = 0 ; i < pointlist.length ; i++)
-    // {
-    //   let entity = this.GetEntity({
-    //     startPosition:position,
-    //     endPosition:pointlist[i],
-    //     height:5000,
-    //     count:50})
-    //   source.entities.add(entity)
-    // }
-    // window.viewer.dataSources.add(source);
-    // window.viewer.zoomTo(source);
   },
   methods:{
     Change2D(){
