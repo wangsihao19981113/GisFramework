@@ -1,3 +1,5 @@
+import SuperGif from  'libgif'
+
 function GifIcon(config)
 {
     this.config = config;
@@ -9,7 +11,7 @@ GifIcon.prototype.show = function (viewer)
     this.viewer = viewer
     var  gifDiv = document.createElement('div');
     var  gifImg = document.createElement('img');
-    gifImg.setAttribute('rel:animated_src', GLOBAL.domainResource + "/static/systems/item-widgets/customs/commons/img/arrow.gif");
+    gifImg.setAttribute('rel:animated_src', "/Image/Example/PointStyle/star.gif");
     gifImg.setAttribute('rel:auto_play', '1');
     gifDiv.appendChild(gifImg);
     var superGif = new SuperGif({gif:gifImg})
@@ -42,4 +44,8 @@ GifIcon.prototype.destroy = function (){
         this.viewer.entities.remove(this.entity)
         this.entity = null;
     }
+}
+
+export {
+    GifIcon
 }

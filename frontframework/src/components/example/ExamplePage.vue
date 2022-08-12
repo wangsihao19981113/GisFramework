@@ -90,25 +90,18 @@ let config = [
         ]
       },
       {
-        name:"线样式",
+        name:"面样式",
         id:"el_1_2",
         third:[
           {
-            name:"上升线",
-            img:"/Image/img.png"
+            name:"水面",
+            img:"/Image/Example/WaterStyle/WaterNormal.png",
+            url:"/WaterNormal"
           },
-          {
-            name:"上升线",
-            img:"/Image/img.png"
-          },
-          {
-            name:"上升线",
-            img:"/Image/img.png"
-          }
         ]
       },
       {
-        name:"线样式",
+        name:"点样式",
         id:"el_1_3",
         third:[
           {
@@ -139,6 +132,48 @@ let config = [
             name:"饼图",
             img:"/Image/Example/StatisticalChart/PieChart.png",
             url:"/PieChart"
+          },
+        ]
+      },{
+        name:"热力图",
+        id:"HeatMapNormal",
+        third:[
+          {
+            name:"普通热力图",
+            img:"/Image/Example/HeatMap/HeatMapNormal.png",
+            url:"/HeatMapNormal"
+          },
+        ]
+      }]
+  },
+  {
+    name:"基础功能",
+    id:"BaseFun",
+    second:[
+      {
+        name:"数据加载",
+        id:"DataLoad",
+        third:[
+          {
+            name:"建筑白膜",
+            img:"/Image/Example/DataLoad/BuildingModel.png",
+            url:"/BuildingModel"
+          },
+        ]
+      },]
+  },
+  {
+    name:"场景",
+    id:"Scene",
+    second:[
+      {
+        name:"场景效果",
+        id:"SceneEffect",
+        third:[
+          {
+            name:"阴影效果",
+            img:"/Image/Example/SceneEffect/Shadow.png",
+            url:"/Shadow"
           },
         ]
       },]

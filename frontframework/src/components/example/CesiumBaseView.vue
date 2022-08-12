@@ -29,12 +29,11 @@ export default {
       // terrainExaggeration: 1,
       //天地图
       // imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
+      //   id:"tianditu",
       //   //http://t0.tianditu.gov.cn/vec_w
-      //   url:"http://t0.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=3936357f969edfea7547fda751cf1473",
-      //   layer: "tdtImgLayer",
+      //   url:"http://t0.tianditu.gov.cn/vec_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=vec&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=3936357f969edfea7547fda751cf1473",
       //   style: "default",
       //   format: "image/jpeg",
-      //   tileMatrixSetID: "GoogleMapsCompatible",
       // }),
       // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
       //   url: 'http://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer',
@@ -56,6 +55,8 @@ export default {
         }
       }
     });
+    // viewer.imageryLayers.get(0).hue = 3;
+    // viewer.imageryLayers.get(0).contrast = -1.2;
     //viewer.cesiumWidget.creditContainer.style.display = "none"
     window.viewer = viewer;
   },

@@ -1,11 +1,11 @@
-function addwater(viewer,polygon)
+function addwater(viewer,polygons)
 {
     var watermaterial = new Cesium.Material({
         fabric: {
             type: 'Water',
             uniforms: {
-                baseWaterColor: new Cesium.Color(89 / 255, 148 / 255, 236 / 255, 0.8),
-                blendColor: new Cesium.Color(0.5, 1.0, 0.699, 0.8),
+                baseWaterColor: new Cesium.Color(89 / 255, 148 / 255, 236 / 255, 0.5), //底色
+                blendColor: new Cesium.Color(0.5, 1.0, 0.699, 0.5),
                 normalMap: "/Image/Example/WaterStyle/waterNormals.jpg",
                 frequency: 500.0,
                 animationSpeed: 0.05,
@@ -41,11 +41,16 @@ function addwater(viewer,polygon)
         }
     });
 
+    let polygonPrimitive = [];
 
-    var polygonPrimitive = new Cesium.GeometryInstance({
-        geometry: polygon,
-        id: "chinaocean",
-    });
+    for(let i = 0 ; i < polygons.length ; i++) {
+        let polygon = polygons[i];
+        polygonPrimitive.push(
+            new Cesium.GeometryInstance({
+                geometry: polygon,
+            })
+        )
+    }
 
 
 

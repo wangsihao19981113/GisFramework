@@ -44,6 +44,36 @@ export default new Router({
             path:'/WaterNormal',
             name:'WaterNormal',
             component:resolve => require(['@/components/example/WaterStyle/WaterNormal'], resolve)
+        },
+        {
+            path:'/BuildingModel',
+            name:'BuildingModel',
+            component:resolve => require(['@/components/example/DataLoad/BuildingModel'], resolve)
+        },
+        {
+            path:'/ShapeFile',
+            name:'ShapeFile',
+            component:resolve => require(['@/components/example/DataLoad/ShapeFile'], resolve)
+        },
+        {
+            path:'/Shadow',
+            name:'Shadow',
+            component:resolve => require(['@/components/example/SceneEffect/Shadow'], resolve)
+        },
+        {
+            path:'/InvertedEffect',
+            name:'/InvertedEffect',
+            component:resolve => require(['@/components/example/Mars3d/InvertedEffect'], resolve)
+        },
+        {
+            path:'/GifPoint',
+            name:'/GifPoint',
+            component:resolve => require(['@/components/example/PointStyle/GifPoint'], resolve)
+        },
+        {
+            path:'/HeatMapNormal',
+            name:'/HeatMapNormal',
+            component:resolve => require(['@/components/example/HeatMap/HeatMapNormal'], resolve)
         }
     ]
 })
