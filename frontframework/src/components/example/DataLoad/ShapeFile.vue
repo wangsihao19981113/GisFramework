@@ -1,44 +1,100 @@
 <template>
-  <el-upload
-      drag
-      class="fileChoice"
-      :auto-upload=false
-      :show-file-list="false"
-      action=""
-      :on-change="parsingShape"
-  >
-    <img type="file" src="/Image/Example/DataLoad/ShapeFileIcon.png" alt @click="parsingShape"/>
-  </el-upload>
+  <div>
+    <el-upload
+        class="upload-demo uploadShape"
+        action="localhost:8888/el/posts/"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        :on-change="handleOnChange"
+        multiple
+        :limit="2"
+        :file-list="FileList"
+        :on-exceed="handleExceed">
+      <el-button size="small" type="primary">点击上传</el-button>
+      <div slot="tip" class="el-upload__tip">请上传的shp和dbf文件</div>
+    </el-upload>
+  </div>
 </template>
 
 <script>
-import * as shp from 'shpjs'
+let shapefile = require("shapefile")
 
 export default {
   name: "ShapeFile",
+  data(){
+    return{
+      FileList:null
+    }
+  },
   methods:{
+    handleOnChange(file,fileList){
+      console.log(fileList)
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 2 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    },
+    beforeRemove(file) {
+      return this.$confirm(`确定移除 ${ file.name }？`).then(function(res) {
+        console.log(res)
+      }).catch(function(err) {
+        console.log(err)
+      })
+    },
     parsingShape(files, fileList){
       let _self=this;
+      let fileshp = null;
+      let filedbf = null;
       if(fileList){
-        this.file=fileList[fileList.length-1]
-        const name=this.file.name
-        const extension=name.split('.')[1]
-        if('zip'!==extension){
-          this.$message.warning(this.$t('common.message.isNotFile'));
-        }else {
-          debugger
-          const reader= new FileReader()
-          const  fileData=this.file.raw
-          reader.readAsArrayBuffer(fileData)
-          reader.onload = function(e){
-            debugger
-            shp(this.result).then(
-                function(data){
-                  console.log(data)
-                }).catch(function(){
-              _self.$message.warning(_self.$t('common.message.fileFormat'));
-            });
+        for(let i = 0 ; i < fileList.length ; i++)
+        {
+          let name = fileList[i].name
+          if(name.substring(name.lastIndexOf(".")+1) == "shp")
+          {
+            fileshp = fileList[i]
           }
+          if(name.substring(name.lastIndexOf(".")+1) == "dbf")
+          {
+            filedbf = fileList[i]
+          }
+        }
+        this.file=fileList[fileList.length-1]
+        const reader= new FileReader()
+        reader.onload = function({ target: { result: A } }){
+          if(filedbf) {
+            reader.readAsDataURL(filedbf.raw);
+            reader.onload = ({target: {result: B}}) => {
+              shapefile.open(A, B).then(
+                  source => source.read()
+                      .then(function log(result) {
+                        if (result.done) return;
+                        console.log(result.value);
+                        return source.read().then(log);
+                      }))
+                  .catch(error => console.error(error.stack));
+            }
+          }else{
+            shapefile.open(A).then(
+                source => source.read()
+                    .then(function log(result) {
+                      if (result.done) return;
+                      console.log(result.value);
+                      return source.read().then(log);
+                    }))
+                .catch(error => console.error(error.stack));
+          }
+        }
+        if(fileshp) {
+          reader.readAsArrayBuffer(fileshp.raw)
+        }
+        else{
+          return
         }
       }
     }
