@@ -17,7 +17,7 @@ export default {
     });
     gifPoint.show(window.viewer);
     window.viewer.camera.flyTo({
-      destination : Cesium.Cartesian3.fromDegrees(115,23,300000),
+      destination : Cesium.Cartesian3.fromDegrees(116,23,300000),
       orientation : {
         heading : Cesium.Math.toRadians(0.0),
         pitch : Cesium.Math.toRadians(-90.0),//倾斜角度
