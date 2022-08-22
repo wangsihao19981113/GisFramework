@@ -13,12 +13,14 @@
     "babel-loader": "^8.2.5",
     "canvas2image": "^1.0.5",
     "cesium": "1.70.0",
+<<<<<<< HEAD
     "cesium-heatmap": "0.0.4",
     "cesiummeshvisualizer": "^1.0.2",
+=======
+>>>>>>> 1e11338b347470235cc39b7e26cbe33fc2dce34a
     "core-js": "^3.8.3",
     "echarts": "^5.3.3",
     "element-ui": "^2.15.9",
-    "heatmapjs": "^2.0.2",
     "jquery": "^3.6.0",
     "jszip": "^3.10.1",
     "libgif": "0.0.3",
