@@ -6,6 +6,7 @@
 </template>
 
 <script>
+//Ceisum和Threejs相机融合
 import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 var scene = null;
@@ -29,7 +30,7 @@ export default {
   },
   methods: {
     // 初始化three.js相关内容
-    init() {
+    initThree() {
       scene = new THREE.Scene()
       scene.add(new THREE.AmbientLight(0x999999)) // 环境光
       this.light = new THREE.DirectionalLight(0xdfebff, 1.3) // 从正上方（不是位置）照射过来的平行光，0.45的强度
@@ -64,50 +65,60 @@ export default {
       // this.controls.maxPolarAngle = Math.PI / 3
       // this.controls.update()
       window.addEventListener('resize', this.onWindowResize, false) // 添加窗口监听事件（resize-onresize即窗口或框架被重新调整大小）
-
-      let self = this;
-      initCesium()
-
-
-      function initCesium() {
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwZDg1ZWFmNS1mYWE4LTRmNTktYjE5MC1jM2M1MTQ5ZDVjZDkiLCJpZCI6MTI1ODYsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1NjE0Mjk1NDl9.v4k0l7bOOcnU4qHEU-ddKnGBnKmRQFHMXYGOjPvayqE";
-        Cesium.Ion.defaultAccessToken = token;
-        self.cesium.viewer = new Cesium.Viewer("cesiumContainer", {
-          useDefaultRenderLoop: false,
-          selectionIndicator: false,
-          homeButton: false,
-          sceneModePicker: false,
-          navigationHelpButton: false,
-          animate: false,
-          timeline: false,
-          fullscreenButton: false,
-          navigationInstructionsInitiallyVisible: false,
-          allowTextureFilterAnisotropic: false,
-          contextOptions: {
-            webgl: {
-              alpha: false,
-              antialias: true,
-              preserveDrawingBuffer: true,
-              failIfMajorPerformanceCaveat: false,
-              depth: true,
-              stencil: false,
-              anialias: false
-            }
-          },
-          targetFrameRate: 60,
-          resolutionScale: 0.1,
-          orderIndependentTranslucency: true,
-          imageryProvider: new Cesium.UrlTemplateImageryProvider({
-            url: 'https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}'
-          }),
-          baseLayerPicker: true,
-          geocoder: false,
-          automaticallyTrackDataSourceClocks: false,
-          dataSources: null,
-          clock: null,
-          terrainShadows: Cesium.ShadowMode.DISABLED
-        });
-      }
+    },
+    initCesium() {
+      var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwZDg1ZWFmNS1mYWE4LTRmNTktYjE5MC1jM2M1MTQ5ZDVjZDkiLCJpZCI6MTI1ODYsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1NjE0Mjk1NDl9.v4k0l7bOOcnU4qHEU-ddKnGBnKmRQFHMXYGOjPvayqE";
+      Cesium.Ion.defaultAccessToken = token;
+      this.cesium.viewer = new Cesium.Viewer("cesiumContainer", {
+        useDefaultRenderLoop: true,
+        selectionIndicator: false,
+        homeButton: false,
+        sceneModePicker: false,
+        navigationHelpButton: false,
+        animate: false,
+        timeline: false,
+        fullscreenButton: false,
+        navigationInstructionsInitiallyVisible: false,
+        allowTextureFilterAnisotropic: false,
+        contextOptions: {
+          webgl: {
+            alpha: false,
+            antialias: true,
+            preserveDrawingBuffer: true,
+            failIfMajorPerformanceCaveat: false,
+            depth: true,
+            stencil: false,
+            anialias: false
+          }
+        },
+        animation:false,
+        targetFrameRate: 60,
+        resolutionScale: 0.1,
+        orderIndependentTranslucency: true,
+        imageryProvider: new Cesium.UrlTemplateImageryProvider({
+          url: 'https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}'
+        }),
+        baseLayerPicker: true,
+        geocoder: false,
+        automaticallyTrackDataSourceClocks: false,
+        dataSources: null,
+        clock: null,
+        terrainShadows: Cesium.ShadowMode.DISABLED
+      });
+      //帧率显示
+      this.cesium.viewer.scene.debugShowFramesPerSecond = true;
+      this.cesium.viewer.camera.flyTo({
+        destination : Cesium.Cartesian3.fromDegrees(112,23,100000),
+        orientation : {
+          heading : Cesium.Math.toRadians(0.0),
+          pitch : Cesium.Math.toRadians(-90.0),//倾斜角度
+          roll : 0.0
+        },
+        duration:0,//动画持续时间
+        complete:()=>{//飞行结束之后执行的方法
+        }
+      });
+      this.cesium.viewer.cesiumWidget.creditContainer.style.display = "none";
     },
     // 窗口监听函数
     onWindowResize() {
@@ -119,29 +130,14 @@ export default {
       requestAnimationFrame(this.render)
       this.renderCamera();
       this.renderer.render(scene, this.camera);
-      this.cesium.viewer.render();
     },
-    addGeometry() {
-      const floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1)
-      const floorMaterial = new THREE.MeshPhongMaterial({
-        color: 0x000000,
-        shininess: 0
-        // wireframe: true
-      })
-      const floor = new THREE.Mesh(floorGeometry, floorMaterial)
-      floor.rotation.x = -0.5 * Math.PI
-      floor.position.y = -2.1
-      // 地板接受阴影开启
-      floor.receiveShadow = true
-      scene.add(floor)
-    },
-    addGeometry2(){
+    addGeometry(){
       let geometry = new THREE.SphereGeometry(1, 32, 32);
       let sphere = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xFFFF00, side: THREE.DoubleSide }));   //12面体
       // sphere.scale.set(5000,5000,5000);
       // sphere.position.z+=15000;
       // translate "up" in Three.js space so the "bottom" of the mesh is the handle
-      let position = Cesium.Cartesian3.fromDegrees(122,23,0);
+      let position = Cesium.Cartesian3.fromDegrees(112,23,0);
       sphere.scale.set(5000,5000,5000);
       sphere.uuid = "sphere";
       var sphereYup = new THREE.Group();
@@ -182,10 +178,10 @@ export default {
     },
   },
   mounted() {
-    this.init()
+    this.initThree()
+    this.initCesium()
     this.render()
     this.addGeometry()
-    this.addGeometry2()
   },
   components: {}
 }

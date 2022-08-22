@@ -116,6 +116,12 @@ export default new Router({
             path:'/ThreeJSLoad3dtiles',
             name:'ThreeJSLoad3dtiles',
             component:resolve => require(['@/components/example/DataLoad/ThreeJSLoad3dtiles'], resolve)
+        },
+        //
+        {
+            path:"/ModelAdjustment",
+            name:"ModelAdjustment",
+            component:resolve => require(['@/components/example/CesiumWithThreeJS/ModelAdjustment'], resolve)
         }
     ]
 })

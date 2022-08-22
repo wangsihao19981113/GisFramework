@@ -159,6 +159,11 @@ let config = [
             img:"/Image/Example/DataLoad/BuildingModel.png",
             url:"/BuildingModel"
           },
+          {
+            name:"threejs加载3dtile(相机融合)",
+            img:"Image/Example/DataLoad/ThreeJSLoad3dtiles.png",
+            url:"/ThreeJSLoad3dtiles"
+          }
         ]
       },]
   },
@@ -176,8 +181,25 @@ let config = [
             url:"/Shadow"
           },
         ]
-      },]
-  }
+      },
+      {
+        name:"ThreeJS场景融合",
+        id:"SceneFusion",
+        third:[
+          {
+            name:"ThreeJS相机融合",
+            img:"/Image/Example/CesiumWithThreeJS/CameraFusion.png",
+            url:"/CameraFusion"
+          },
+          {
+            name:"经纬度和角度控件",
+            img:"/Image/Example/CesiumWithThreeJS/ModelAdjustment.png",
+            url:"/ModelAdjustment"
+          },
+        ]
+      },
+    ]
+  },
 ]
 export default {
   name: "ExamplePage",
