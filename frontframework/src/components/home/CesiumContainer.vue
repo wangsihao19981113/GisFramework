@@ -55,7 +55,6 @@ export default {
     viewer.cesiumWidget.creditContainer.style.display = "none"
     window.viewer = viewer;
     WallDiffuseMaterialProperty.addWallDiffuseMaterial();
-
     debugger;
     viewer.entities.add({
       name: "立体墙效果",

@@ -183,6 +183,17 @@ let config = [
         ]
       },
       {
+        name:"气象",
+        id:"SceneEffect",
+        third:[
+          {
+            name:"风场",
+            img:"/Image/Example/Weather/Windy.png",
+            url:"/Windy"
+          },
+        ]
+      },
+      {
         name:"ThreeJS场景融合",
         id:"SceneFusion",
         third:[

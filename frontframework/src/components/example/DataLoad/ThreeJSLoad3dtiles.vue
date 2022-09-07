@@ -56,8 +56,8 @@ export default {
       this.light.shadow.mapSize = new THREE.Vector2(1024, 1024)
       this.scene.add(this.light)
       // 初始化相机
-      this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 100000000)
-      this.camera.position.set(0, 0, 0)
+      this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1,100000000)
+      this.camera.position.set(0, 100, 100)
       const container = document.getElementById('ThreeContainer') // threeJS挂载位置
       this.renderer = new THREE.WebGLRenderer({
         alpha: true
@@ -72,7 +72,7 @@ export default {
       //添加控制器
       this.controls = new OrbitControls(this.camera, this.renderer.domElement)
       this.controls.target.set(0, 0, 0) // ------------------
-      this.controls.minDistance = 1
+      this.controls.minDistance = 0.1
       this.controls.maxDistance = 500000
       // this.controls.maxPolarAngle = Math.PI / 3
       // this.controls.update()

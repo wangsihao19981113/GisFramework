@@ -122,6 +122,18 @@ export default new Router({
             path:"/ModelAdjustment",
             name:"ModelAdjustment",
             component:resolve => require(['@/components/example/CesiumWithThreeJS/ModelAdjustment'], resolve)
+        },
+        //
+        {
+            path:"/OceanWater",
+            name:"OceanWater",
+            component:resolve => require(['@/components/example/WaterWithThreejs/OceanWater'], resolve)
+        },
+        //
+        {
+            path:"/Windy",
+            name:"Windy",
+            component:resolve => require(['@/components/example/Weather/Windy'], resolve)
         }
     ]
 })

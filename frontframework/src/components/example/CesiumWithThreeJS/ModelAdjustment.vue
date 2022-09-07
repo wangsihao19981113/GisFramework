@@ -2,32 +2,38 @@
   <div>
     <div id="cesiumContainer"></div>
     <div id="ThreeContainer"></div>
-    <div class="adjustElement" style="margin: 0px">
+    <div class="adjustElement" style="margin: 0px;color: white">
+      经度
       <el-button icon="el-icon-plus" @click="adjustPosition('lngplus')" ></el-button>
       <el-button icon="el-icon-minus" @click="adjustPosition('lngminus')"></el-button>
       <el-input v-model="input.lngUnion" placeholder="请输入内容"></el-input>
     </div>
-    <div class="adjustElement" style="margin-top: 50px">
+    <div class="adjustElement" style="margin-top: 50px;color: white">
+      纬度
       <el-button icon="el-icon-plus" @click="adjustPosition('latplus')" ></el-button>
       <el-button icon="el-icon-minus" @click="adjustPosition('latminus')"></el-button>
       <el-input v-model="input.latUnion" placeholder="请输入内容"></el-input>
     </div>
-    <div class="adjustElement" style="margin-top: 100px">
+    <div class="adjustElement" style="margin-top: 100px;color: white">
+      高度
       <el-button icon="el-icon-plus" @click="adjustPosition('heightplus')" ></el-button>
       <el-button icon="el-icon-minus" @click="adjustPosition('heightminus')"></el-button>
       <el-input v-model="input.heightUnion" placeholder="请输入内容"></el-input>
     </div>
-    <div class="adjustElement" style="margin-top: 150px">
+    <div class="adjustElement" style="margin-top: 150px;color: white">
+      x旋转角
       <el-button icon="el-icon-plus" @click="adjustRotation('xplus')"></el-button>
       <el-button icon="el-icon-minus" @click="adjustRotation('xminus')"></el-button>
       <el-input v-model="input.rotationXUnion" placeholder="请输入内容"></el-input>
     </div>
-    <div class="adjustElement" style="margin-top: 200px">
+    <div class="adjustElement" style="margin-top: 200px;color: white">
+      y旋转角
       <el-button icon="el-icon-plus" @click="adjustRotation('yplus')"></el-button>
       <el-button icon="el-icon-minus" @click="adjustRotation('yminus')"></el-button>
       <el-input v-model="input.rotationYUnion" placeholder="请输入内容"></el-input>
     </div>
-    <div class="adjustElement" style="margin-top: 250px">
+    <div class="adjustElement" style="margin-top: 250px;color: white">
+      z旋转角
       <el-button icon="el-icon-plus" @click="adjustRotation('zplus')"></el-button>
       <el-button icon="el-icon-minus" @click="adjustRotation('zminus')"></el-button>
       <el-input v-model="input.rotationZUnion" placeholder="请输入内容"></el-input>
@@ -65,22 +71,12 @@ export default {
     }
   },
   mounted() {
-    this.test();
     this.initThree();
     this.initCesium();
     this.addGeometry();
     this.render();
   },
   methods:{
-    test(){
-      let coordinate = [[20.560585,110.48226],[20.577832,110.589409],[20.588599,110.589409],[20.593259,110.580654],[20.604668,110.585804],[20.601776,110.59164],[20.597116,110.590954],[20.595348,110.596619],[20.614148,110.605888],[20.610613,110.612583],[20.600651,110.608635],[20.604507,110.61636],[20.623948,110.626831],[20.620253,110.633526],[20.600008,110.626316],[20.59342,110.636959],[20.578796,110.631123],[20.560635,110.637131],[20.545044,110.628548],[20.532827,110.637646],[20.527843,110.632668],[20.534434,110.62254],[20.525593,110.615845],[20.527682,110.609665],[20.543276,110.614815],[20.549384,110.61327],[20.54199,110.609493],[20.544561,110.601768],[20.560314,110.608292],[20.573653,110.605202],[20.566743,110.601425],[20.558626,110.482528],[20.560585,110.48226]];
-      let a = "";
-      for(var i = 0 ; i < coordinate.length ; i++)
-      {
-        a = a + coordinate[i][1] + " " + coordinate[i][0] + ","
-      }
-      console.log(a)
-    },
     adjustPosition(type){
       if(this.sphereYup) {
         let positionNow = this.cesium.viewer.scene.globe.ellipsoid.cartesianToCartographic(new Cesium.Cartesian3(this.sphereYup.position.x, this.sphereYup.position.y, this.sphereYup.position.z));
