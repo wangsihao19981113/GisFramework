@@ -1,0 +1,398 @@
+{
+    "accessors": [
+        {
+            "bufferView": 2,
+            "componentType": 5126,
+            "count": 272,
+            "max": [
+                36.585899353027344,
+                72.45539855957031,
+                3.203000068664551
+            ],
+            "min": [
+                -36.584598541259766,
+                -72.6626968383789,
+                -25.734500885009766
+            ],
+            "type": "VEC3",
+            "byteOffset": 0
+        },
+        {
+            "bufferView": 2,
+            "byteOffset": 3264,
+            "componentType": 5126,
+            "count": 272,
+            "max": [
+                1,
+                1,
+                1
+            ],
+            "min": [
+                -1,
+                -1,
+                -1
+            ],
+            "type": "VEC3"
+        },
+        {
+            "bufferView": 3,
+            "componentType": 5126,
+            "count": 272,
+            "max": [
+                1,
+                1,
+                0.000587657792493701,
+                1
+            ],
+            "min": [
+                -1,
+                -0.9241554737091064,
+                -0.38334929943084717,
+                -1
+            ],
+            "type": "VEC4",
+            "byteOffset": 0
+        },
+        {
+            "bufferView": 1,
+            "componentType": 5126,
+            "count": 272,
+            "max": [
+                0.9951000213623047,
+                0.8518000245094299
+            ],
+            "min": [
+                0.5235999822616577,
+                0.5153999924659729
+            ],
+            "type": "VEC2",
+            "byteOffset": 0
+        },
+        {
+            "bufferView": 0,
+            "componentType": 5125,
+            "count": 768,
+            "type": "SCALAR",
+            "byteOffset": 0
+        },
+        {
+            "bufferView": 2,
+            "byteOffset": 6528,
+            "componentType": 5126,
+            "count": 1908,
+            "max": [
+                42.84090042114258,
+                98.84539794921875,
+                35.774898529052734
+            ],
+            "min": [
+                -42.84040069580078,
+                -94.84390258789062,
+                -18.163700103759766
+            ],
+            "type": "VEC3"
+        },
+        {
+            "bufferView": 2,
+            "byteOffset": 29424,
+            "componentType": 5126,
+            "count": 1908,
+            "max": [
+                1,
+                0.9999997615814209,
+                0.9999406337738037
+            ],
+            "min": [
+                -1,
+                -1,
+                -0.9999642372131348
+            ],
+            "type": "VEC3"
+        },
+        {
+            "bufferView": 3,
+            "byteOffset": 4352,
+            "componentType": 5126,
+            "count": 1908,
+            "max": [
+                1,
+                0.9999547600746155,
+                0.9946698546409607,
+                1
+            ],
+            "min": [
+                -1,
+                -0.9999484419822693,
+                -0.9905080199241638,
+                1
+            ],
+            "type": "VEC4"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 2176,
+            "componentType": 5126,
+            "count": 1908,
+            "max": [
+                0.9958999752998352,
+                0.9958999752998352
+            ],
+            "min": [
+                0.0010000000474974513,
+                0.0010000000474974513
+            ],
+            "type": "VEC2"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 3072,
+            "componentType": 5125,
+            "count": 6138,
+            "type": "SCALAR"
+        }
+    ],
+    "asset": {
+        "extras": {
+            "author": "TSB3DMODELS (https://sketchfab.com/TSB3DMODELS)",
+            "license": "CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)",
+            "source": "https://sketchfab.com/3d-models/ford-mondeo-civilian-red-b5cf576fb60a4e75a2134a07bdbe6376",
+            "title": "Ford Mondeo Civilian (RED)"
+        },
+        "generator": "Sketchfab-13.74.0",
+        "version": "2.0"
+    },
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteLength": 27624,
+            "name": "floatBufferViews",
+            "target": 34963,
+            "byteOffset": 0
+        },
+        {
+            "buffer": 0,
+            "byteLength": 17440,
+            "byteOffset": 27624,
+            "byteStride": 8,
+            "name": "floatBufferViews",
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 52320,
+            "byteOffset": 45064,
+            "byteStride": 12,
+            "name": "floatBufferViews",
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 34880,
+            "byteOffset": 97384,
+            "byteStride": 16,
+            "name": "floatBufferViews",
+            "target": 34962
+        }
+    ],
+    "buffers": [
+        {
+            "name": "scene",
+            "byteLength": 132264,
+            "uri": "scene.bin"
+        }
+    ],
+    "images": [
+        {
+            "name": "wire_006134006_baseColor",
+            "uri": "textures/wire_006134006_baseColor.png"
+        },
+        {
+            "name": "wire_006134006_metallicRoughness",
+            "uri": "textures/wire_006134006_metallicRoughness.png"
+        },
+        {
+            "name": "wire_006134006_normal",
+            "uri": "textures/wire_006134006_normal.png"
+        }
+    ],
+    "materials": [
+        {
+            "name": "wire_006134006",
+            "normalTexture": {
+                "index": 2,
+                "texCoord": 0
+            },
+            "occlusionTexture": {
+                "index": 1,
+                "texCoord": 0
+            },
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                    "index": 0,
+                    "texCoord": 0
+                },
+                "metallicRoughnessTexture": {
+                    "index": 1,
+                    "texCoord": 0
+                },
+                "baseColorFactor": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+            },
+            "emissiveFactor": [
+                0,
+                0,
+                0
+            ],
+            "alphaMode": "OPAQUE",
+            "doubleSided": false
+        },
+        {
+            "name": "wire_087224198",
+            "normalTexture": {
+                "index": 2,
+                "texCoord": 0
+            },
+            "occlusionTexture": {
+                "index": 1,
+                "texCoord": 0
+            },
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                    "index": 0,
+                    "texCoord": 0
+                },
+                "metallicRoughnessTexture": {
+                    "index": 1,
+                    "texCoord": 0
+                },
+                "baseColorFactor": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+            },
+            "emissiveFactor": [
+                0,
+                0,
+                0
+            ],
+            "alphaMode": "OPAQUE",
+            "doubleSided": false
+        }
+    ],
+    "meshes": [
+        {
+            "name": "Object_0",
+            "primitives": [
+                {
+                    "attributes": {
+                        "NORMAL": 1,
+                        "POSITION": 0,
+                        "TANGENT": 2,
+                        "TEXCOORD_0": 3
+                    },
+                    "indices": 4,
+                    "material": 0,
+                    "mode": 4
+                }
+            ]
+        },
+        {
+            "name": "Object_1",
+            "primitives": [
+                {
+                    "attributes": {
+                        "NORMAL": 6,
+                        "POSITION": 5,
+                        "TANGENT": 7,
+                        "TEXCOORD_0": 8
+                    },
+                    "indices": 9,
+                    "material": 1,
+                    "mode": 4
+                }
+            ]
+        }
+    ],
+    "nodes": [
+        {
+            "children": [
+                1
+            ],
+            "matrix": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                2.220446049250313e-16,
+                -1,
+                0,
+                0,
+                1,
+                2.220446049250313e-16,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            "name": "Sketchfab_model"
+        },
+        {
+            "children": [
+                2,
+                3
+            ],
+            "name": "Mondeo_Civilian.obj.cleaner.materialmerger.gles"
+        },
+        {
+            "mesh": 0,
+            "name": "Object_2"
+        },
+        {
+            "mesh": 1,
+            "name": "Object_3"
+        }
+    ],
+    "samplers": [
+        {
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapS": 10497,
+            "wrapT": 10497
+        }
+    ],
+    "scene": 0,
+    "scenes": [
+        {
+            "name": "Sketchfab_Scene",
+            "nodes": [
+                0
+            ]
+        }
+    ],
+    "textures": [
+        {
+            "sampler": 0,
+            "source": 0
+        },
+        {
+            "sampler": 0,
+            "source": 1
+        },
+        {
+            "sampler": 0,
+            "source": 2
+        }
+    ]
+}
