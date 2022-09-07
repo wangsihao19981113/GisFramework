@@ -55,9 +55,7 @@ export default {
         }
       }
     });
-    // viewer.imageryLayers.get(0).hue = 3;
-    // viewer.imageryLayers.get(0).contrast = -1.2;
-    //viewer.cesiumWidget.creditContainer.style.display = "none"
+    viewer.cesiumWidget.creditContainer.style.display = "none";
     window.viewer = viewer;
   },
 }
