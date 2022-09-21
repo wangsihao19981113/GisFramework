@@ -1,0 +1,64 @@
+<template>
+  <div>
+    <div style="position:absolute;z-index: 1;background-color: white">
+      <el-radio v-model="url" label="/WindyData/demo.nc">NC</el-radio>
+      <el-radio v-model="url" label="/WindyData/wind.json">JSON</el-radio>
+    </div>
+    <CesiumBaseView></CesiumBaseView>
+  </div>
+</template>
+
+
+<script>
+import CesiumBaseView from "@/components/example/CesiumBaseView";
+import {Wind3D} from "@/lib/weather/Wind/windy";
+
+export default {
+  components: {CesiumBaseView},
+  data(){
+    return{
+      wind3D:null,
+      url:"/WindyData/demo.nc",
+      param:{
+        "particlesTextureSize":64,
+        "maxParticles":4096,
+        "particleHeight":100,
+        "fadeOpacity":0.996,
+        "dropRate":0.003,
+        "dropRateBump":0.01,
+        "speedFactor":1,
+        "lineWidth":4,
+        "globeLayer":{"name":"NaturalEarthII","type":"NaturalEarthII"},
+      },
+      mode:{
+        debug: true
+      }
+    }
+  },
+  mounted() {
+    // 显示帧率
+    window.viewer.scene.debugShowFramesPerSecond = true;
+    this.wind3D = new Wind3D(
+        this.param,
+        this.mode,
+        this.url,
+        window.viewer
+    );
+  },
+  watch:{
+    url:function (){
+      this.wind3D.remove();
+      this.wind3D = new Wind3D(
+          this.param,
+          this.mode,
+          this.url,
+          window.viewer
+      )
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

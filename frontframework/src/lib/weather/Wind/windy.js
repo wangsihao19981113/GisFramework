@@ -1,3 +1,4 @@
+let type = "NC"
 class CustomPrimitive {
     constructor(options) {
         this.commandType = options.commandType;
@@ -116,7 +117,7 @@ class CustomPrimitive {
     }
 }
 
-var DataProcess = (function () {
+var DataProcessNC = (function () {
     var data;
 
     var loadNetCDF = function (filePath) {
@@ -171,6 +172,7 @@ var DataProcess = (function () {
                 data.V.min = vAttributes['min'].value;
                 data.V.max = vAttributes['max'].value;
 
+                type = "NC"
                 resolve(data);
             };
 
@@ -182,6 +184,86 @@ var DataProcess = (function () {
         var ncFilePath = url;
         await loadNetCDF(ncFilePath);
 
+        return data;
+    }
+
+    var randomizeParticles = function (maxParticles, viewerParameters) {
+        var array = new Float32Array(4 * maxParticles);
+        for (var i = 0; i < maxParticles; i++) {
+            array[4 * i] = Cesium.Math.randomBetween(viewerParameters.lonRange.x, viewerParameters.lonRange.y);
+            array[4 * i + 1] = Cesium.Math.randomBetween(viewerParameters.latRange.x, viewerParameters.latRange.y);
+            array[4 * i + 2] = Cesium.Math.randomBetween(data.lev.min, data.lev.max);
+            array[4 * i + 3] = 0.0;
+        }
+        return array;
+    }
+
+    return {
+        loadData: loadData,
+        randomizeParticles: randomizeParticles
+    };
+
+})();
+
+var DataProcessJSON = (function () {
+    var data;
+
+    var loadNetCDF = function (filePath) {
+        return new Promise(function (resolve) {
+            var request = new XMLHttpRequest();
+            request.open('GET', filePath);
+
+            request.onload = function () {
+                data = {}
+                let a = JSON.parse(request.response);
+                let header = a[0].header;
+                let array = [];
+                for(let i = header.la2 ; i <= header.la1 ; i = i + header.dy)
+                {
+                    array.push(i);
+                }
+                data["lat"] = {array:new Float32Array(array),min:header.la2,max:header.la1}
+
+                array = [];
+                for(let i = header.lo1 ; i <= header.lo2 ; i = i + header.dx)
+                {
+                    array.push(i);
+                }
+
+                let arrayU = []
+                for(let i = 180 ; i >= 0 ; i--){
+                    for(let j = 0 ; j < 360 ; j++){
+                        arrayU.push(a[0].data[i*header.nx + j])
+                    }
+                }
+
+                let arrayV = []
+                for(let i = 180 ; i >= 0 ; i--){
+                    for(let j = 0 ; j < 360 ; j++){
+                        arrayV.push(a[1].data[i*header.nx + j])
+                    }
+                }
+
+                data["lon"] = {array:new Float32Array(array),min:header.lo1,max:header.lo2};
+                // data["U"] = {array:new Float32Array(a[0].data) , min: Math.min(...a[0].data) , max: Math.max(...a[0].data)};
+                // data["V"] = {array:new Float32Array(a[1].data) , min: Math.min(...a[1].data) , max: Math.max(...a[1].data)};
+                data["U"] = {array:new Float32Array(arrayU) , min: Math.min(...arrayU) , max: Math.max(...arrayU)};
+                data["V"] = {array:new Float32Array(arrayV) , min: Math.min(...arrayV) , max: Math.max(...arrayV)};
+                data["dimensions"] = { lon:header.nx, lat:header.ny, lev:1};
+                data["lev"] = {array:new Float32Array([1]) , min : 1 , max : 1};
+
+                type = "JSON"
+
+                resolve(data);
+            };
+
+            request.send();
+        });
+    }
+
+    var loadData = async function (url) {
+        var JSONFilePath = url;
+        await loadNetCDF(JSONFilePath);
         return data;
     }
 
@@ -349,8 +431,13 @@ class ParticlesComputing {
                 magnificationFilter: Cesium.TextureMagnificationFilter.NEAREST
             })
         };
-
-        var particlesArray = DataProcess.randomizeParticles(userInput.maxParticles, viewerParameters)
+        var particlesArray;
+        if(type == "NC") {
+            particlesArray = DataProcessNC.randomizeParticles(userInput.maxParticles, viewerParameters)
+        }
+        else{
+            particlesArray = DataProcessJSON.randomizeParticles(userInput.maxParticles, viewerParameters)
+        }
         var zeroArray = new Float32Array(4 * userInput.maxParticles).fill(0);
 
         this.particlesTextures = {
@@ -1009,18 +1096,43 @@ class Wind3D {
         this.globeBoundingSphere = new Cesium.BoundingSphere(Cesium.Cartesian3.ZERO, 0.99 * 6378137.0);
         this.updateViewerParameters();
 
-        DataProcess.loadData(url).then(
-            (data) => {
-                this.particleSystem = new ParticleSystem(this.scene.context, data,
-                    this.param, this.viewerParameters);
-                this.addPrimitives();
+        let extention = url.substring(url.lastIndexOf(".")+1)
+        switch (extention){
+            case "json":
+                DataProcessJSON.loadData(url).then(
+                    (data) => {
+                        this.particleSystem = new ParticleSystem(this.scene.context, data,
+                            this.param, this.viewerParameters);
+                        this.addPrimitives();
 
-                this.setupEventListeners();
+                        this.setupEventListeners();
 
-                if (mode.debug) {
-                    this.debug();
-                }
-            });
+                        if (mode.debug) {
+                            this.debug();
+                        }
+                    }
+                );
+                break;
+            case "nc":
+                DataProcessNC.loadData(url).then(
+                    (data) => {
+                        this.particleSystem = new ParticleSystem(this.scene.context, data,
+                            this.param, this.viewerParameters);
+                        this.addPrimitives();
+
+                        this.setupEventListeners();
+
+                        if (mode.debug) {
+                            this.debug();
+                        }
+                    });
+                break;
+        }
+
+
+
+
+
     }
 
     addPrimitives() {

@@ -134,6 +134,11 @@ export default new Router({
             path:"/Windy",
             name:"Windy",
             component:resolve => require(['@/components/example/Weather/Windy'], resolve)
+        },
+        {
+            path:"/SectorShape",
+            name:"SectorShape",
+            component:resolve => require(['@/components/example/Figure/SectorShape'], resolve)
         }
     ]
 })
