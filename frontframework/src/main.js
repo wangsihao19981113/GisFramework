@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store/index'
-
-// import router from './route/routes'
-import router from './route/routesThreejs'
+import router from './route/routes'
+//import router from './route/routesThreejs'
 
 import axios from 'axios'
 
