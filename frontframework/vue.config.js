@@ -12,6 +12,13 @@ module.exports = defineConfig({
           '^/el': ''
         }
       },
+      '/datasource':{
+        target: 'http://localhost:6969',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/datasource': ''
+        }
+      }
     }
   }
 })

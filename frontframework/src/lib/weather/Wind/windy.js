@@ -1,3 +1,218 @@
+var decoder = function () {
+    "use strict";
+
+    /**
+     * Decodes a UTF8 string from an array of bytes.
+     *
+     * @param {Uint8Array} bytes an array of bytes
+     * @returns {String} the decoded String
+     */
+    function decodeUTF8(bytes) {
+        var charCodes = [];
+        for (var i = 0; i < bytes.length;) {
+            var b = bytes[i++];
+            switch (b >> 4) {
+                case 0xc:
+                case 0xd:
+                    b = (b & 0x1f) << 6 | bytes[i++] & 0x3f;
+                    break;
+                case 0xe:
+                    b = (b & 0x0f) << 12 | (bytes[i++] & 0x3f) << 6 | bytes[i++] & 0x3f;
+                    break;
+                default:
+                // use value as-is
+            }
+            charCodes.push(b);
+        }
+        return String.fromCharCode.apply(null, charCodes);
+    }
+
+    function varpackDecode(bytes, size) {
+        var values = new Float32Array(size), i = 0, j = 0;
+        while (i < bytes.length) {
+            var b = bytes[i++];
+            if (b < 128) {
+                b = b << 25 >> 25;
+            } else {
+                switch (b >> 4) {
+                    case 0x8:
+                    case 0x9:
+                    case 0xa:
+                    case 0xb:
+                        b = (b << 26 >> 18) | bytes[i++];
+                        break;
+                    case 0xc:
+                    case 0xd:
+                        b = (b << 27 >> 11) | bytes[i++] << 8 | bytes[i++];
+                        break;
+                    case 0xe:
+                        b = (b << 28 >> 4) | bytes[i++] << 16 | bytes[i++] << 8 | bytes[i++];
+                        break;
+                    case 0xf:
+                        if (b === 255) {
+                            for (var run = 1 + bytes[i++]; run > 0; run--) {
+                                values[j++] = Number.NaN;
+                            }
+                            continue;
+                        } else {
+                            b = bytes[i++] << 24 | bytes[i++] << 16 | bytes[i++] << 8 | bytes[i++];
+                        }
+                        break;
+                }
+            }
+            values[j++] = b;
+        }
+        return values;
+    }
+
+    function undeltaPlane(values, cols, rows, grids) {
+        var x, y, z, i, j, k, p;
+
+        for (z = 0; z < grids; z++) {
+            k = z * cols * rows;
+            for (x = 1; x < cols; x++) {
+                i = k + x;
+                p = values[i - 1];
+                values[i] += (p === p ? p : 0);
+            }
+            for (y = 1; y < rows; y++) {
+                j = k + y * cols;
+                p = values[j - cols];
+                values[j] += (p === p ? p : 0);
+                for (x = 1; x < cols; x++) {
+                    i = j + x;
+                    var a = values[i - 1];
+                    var b = values[i - cols];
+                    var c = values[i - cols - 1];
+                    p = a + b - c;
+                    values[i] += (p === p ? p : a === a ? a : b === b ? b : c === c ? c : 0);
+                }
+            }
+        }
+
+        return values;
+    }
+
+    function dequantize(values, scaleFactor) {
+        var m = Math.pow(10, scaleFactor);
+        for (var i = 0; i < values.length; i++) {
+            values[i] /= m;
+        }
+        return values;
+    };
+
+    /**
+     * Decodes a quantized delta-plane varpack array of floats.
+     *
+     * @param {Uint8Array} bytes the encoded values as an array of bytes
+     * @param cols size of the x dimension
+     * @param rows size of the y dimension
+     * @param grids size of the z dimension
+     * @param scaleFactor number of decimal digits after (+) or before (-) the decimal point to retain
+     * @returns {Float32Array} the decoded values
+     */
+    function decodePpak(bytes, cols, rows, grids, scaleFactor) {
+        var values;
+        values = decoder.varpackDecode(bytes, cols * rows * grids);
+        values = decoder.undeltaPlane(values, cols, rows, grids);
+        values = decoder.dequantize(values, scaleFactor);
+        return values;
+    }
+
+    /**
+     * Decodes a ppak block from a buffer having the format:
+     * <pre>
+     *       int32   int32   int32      float32     byte[]
+     *     [ cols ][ rows ][ grids ][ scaleFactor ][ data ]
+     *      ----------------------------------------------
+     *                        length
+     * </pre>
+     * All multi-byte values are BE. The number of resulting values is cols * rows * grids.
+     *
+     * @param {ArrayBuffer} buffer the buffer
+     * @param offset buffer byte offset
+     * @param length the byte length of the block
+     * @returns {Float32Array} the decoded values
+     */
+    function decodePpakBlock(buffer, offset, length) {
+        var view = new DataView(buffer, offset, length);
+        return decoder.decodePpak(
+            new Uint8Array(buffer, offset + 16, length - 16),
+            view.getInt32(0),      // cols
+            view.getInt32(4),      // rows
+            view.getInt32(8),      // grids
+            view.getFloat32(12));  // scaleFactor
+    }
+
+    /**
+     * Earth-Pack (EPAK) format:
+     * <pre>
+     *     head  := "head" (BE alpha-4) length (BE int) json (UTF-8 JSON string)
+     *     block :=  type  (BE alpha-4) length (BE int) data (byte[])
+     *     tail  := "tail"
+     *     file  :=  head [block]* tail
+     *
+     *     head                                  block                           tail
+     *     ------------------------------------  ------------------------------  ------
+     *    ["head"][0x00000003][0x10, 0x11, 0x12]["ppak"][0x00000002][0xff, 0xff]["tail"]
+     *             ----------  ----------------  ------  ----------  ----------
+     *               length          json         type     length       data
+     * </pre>
+     *
+     * @param {ArrayBuffer} buffer the buffer to decode
+     * @param {Object} [options] decoding options: {headerOnly: boolean}
+     * @returns {{header: *, blocks: Array}} the decoded values
+     */
+    function decodeEpak(buffer, options) {
+        var headerOnly = !!(options || {}).headerOnly;
+        var i = 0;
+        var view = new DataView(buffer);
+
+        var head = decoder.decodeUTF8(new Uint8Array(buffer, i, 4));
+        i += 4;
+        if (head !== "head") {
+            throw new Error("expected 'head' but found '" + head + "'");
+        }
+
+        var length = view.getInt32(i);
+        i += 4;
+        var header = JSON.parse(decoder.decodeUTF8(new Uint8Array(buffer, i, length)));
+        i += length;
+
+        var block;
+        var blocks = [];
+        var type;
+        while ((type = decoder.decodeUTF8(new Uint8Array(buffer, i, 4))) !== "tail" && !headerOnly) {
+            i += 4;
+            length = view.getInt32(i);
+            i += 4;
+            switch (type) {
+                case "ppak":
+                    block = decoder.decodePpakBlock(buffer, i, length);
+                    break;
+                default:
+                    throw new Error("unknown block type: " + type);
+            }
+            blocks.push(block);
+            i += length;
+        }
+
+        return { header: header, blocks: blocks };
+    }
+
+
+
+    return {
+        decodeUTF8: decodeUTF8,
+        varpackDecode: varpackDecode,
+        undeltaPlane: undeltaPlane,
+        dequantize: dequantize,
+        decodePpak: decodePpak,
+        decodePpakBlock: decodePpakBlock,
+        decodeEpak: decodeEpak
+    };
+}();
+
 let type = "NC"
 class CustomPrimitive {
     constructor(options) {
@@ -231,27 +446,25 @@ var DataProcessJSON = (function () {
                 }
 
                 let arrayU = []
-                for(let i = 180 ; i >= 0 ; i--){
-                    for(let j = 0 ; j < 360 ; j++){
+                for(let i = header.ny-1 ; i >= 0 ; i--){
+                    for(let j = 0 ; j < header.nx ; j++){
                         arrayU.push(a[0].data[i*header.nx + j])
                     }
                 }
 
                 let arrayV = []
-                for(let i = 180 ; i >= 0 ; i--){
-                    for(let j = 0 ; j < 360 ; j++){
+                for(let i = header.ny-1 ; i >= 0 ; i--){
+                    for(let j = 0 ; j < header.nx ; j++){
                         arrayV.push(a[1].data[i*header.nx + j])
                     }
                 }
 
                 data["lon"] = {array:new Float32Array(array),min:header.lo1,max:header.lo2};
-                // data["U"] = {array:new Float32Array(a[0].data) , min: Math.min(...a[0].data) , max: Math.max(...a[0].data)};
-                // data["V"] = {array:new Float32Array(a[1].data) , min: Math.min(...a[1].data) , max: Math.max(...a[1].data)};
                 data["U"] = {array:new Float32Array(arrayU) , min: Math.min(...arrayU) , max: Math.max(...arrayU)};
                 data["V"] = {array:new Float32Array(arrayV) , min: Math.min(...arrayV) , max: Math.max(...arrayV)};
                 data["dimensions"] = { lon:header.nx, lat:header.ny, lev:1};
                 data["lev"] = {array:new Float32Array([1]) , min : 1 , max : 1};
-
+                debugger
                 type = "JSON"
 
                 resolve(data);
@@ -284,6 +497,94 @@ var DataProcessJSON = (function () {
     };
 
 })();
+var DataProcessEPAK = (function () {
+    var data;
+
+    var loadNetCDF = function (filePath) {
+        return new Promise(function (resolve) {
+            var request = new XMLHttpRequest();
+            request.responseType = "arraybuffer";
+            request.open('GET', filePath);
+
+            request.onload = function () {
+                let a = decoder.decodeEpak(request.response);
+                data = {}
+                debugger
+
+                let latConfig = (a.header.variables.lat || a.header.variables.latitude).sequence;
+                let array = [];
+                for(let i = latConfig.start , k = 0 ; k<latConfig.size ; i = i + latConfig.delta , k++)
+                {
+                    array.push(i);
+                }
+                data["lat"] = {array:new Float32Array(array).sort(),min:Math.min(...array),max:Math.max(...array)}
+
+                let lonConfig = (a.header.variables.lon || a.header.variables.longitude).sequence;
+                array = [];
+                for(let i = lonConfig.start , k = 0 ; k<lonConfig.size ; i = i + lonConfig.delta , k++)
+                {
+                    array.push(i);
+                }
+                data["lon"] = {array:new Float32Array(array).sort(),min:Math.min(...array),max:Math.max(...array)}
+
+                // let arrayU = new Float32Array(a.blocks[0]);
+                // let arrayV = new Float32Array(a.blocks[1]);
+                // let sortU = arrayU.sort();
+                // let sortV = arrayV.sort();
+
+                let arrayU = []
+                for(let i = latConfig.size-1 ; i >= 0 ; i--){
+                    for(let j = 0 ; j < lonConfig.size ; j++){
+                        arrayU.push(a.blocks[0][i*lonConfig.size + j])
+                    }
+                }
+
+                let arrayV = []
+                for(let i = latConfig.size-1 ; i >= 0 ; i--){
+                    for(let j = 0 ; j < lonConfig.size ; j++){
+                        arrayV.push(a.blocks[1][i*lonConfig.size + j])
+                    }
+                }
+
+                data["U"] = {array:new Float32Array(arrayU) , min: Math.min(...arrayU) , max: Math.max(...arrayU)};
+                data["V"] = {array:new Float32Array(arrayV) , min: Math.min(...arrayV) , max: Math.max(...arrayV)};
+                data["dimensions"] = { lon:(a.header.dimensions.lon || a.header.dimensions.longitude).length , lat:(a.header.dimensions.lat || a.header.dimensions.latitude).length, lev:1};
+                data["lev"] = {array:new Float32Array([1]) , min : 1 , max : 1};
+                debugger
+                type = "EPAK"
+
+                resolve(data);
+            };
+
+            request.send();
+        });
+    }
+
+    var loadData = async function (url) {
+        var JSONFilePath = url;
+        await loadNetCDF(JSONFilePath);
+        return data;
+    }
+
+    var randomizeParticles = function (maxParticles, viewerParameters) {
+        var array = new Float32Array(4 * maxParticles);
+        for (var i = 0; i < maxParticles; i++) {
+            array[4 * i] = Cesium.Math.randomBetween(viewerParameters.lonRange.x, viewerParameters.lonRange.y);
+            array[4 * i + 1] = Cesium.Math.randomBetween(viewerParameters.latRange.x, viewerParameters.latRange.y);
+            array[4 * i + 2] = Cesium.Math.randomBetween(data.lev.min, data.lev.max);
+            array[4 * i + 3] = 0.0;
+        }
+        return array;
+    }
+
+    return {
+        loadData: loadData,
+        randomizeParticles: randomizeParticles
+    };
+
+})();
+
+
 
 var demo = Cesium.defaultValue(demo, false);
 
@@ -435,8 +736,11 @@ class ParticlesComputing {
         if(type == "NC") {
             particlesArray = DataProcessNC.randomizeParticles(userInput.maxParticles, viewerParameters)
         }
-        else{
+        else if(type == "JSON"){
             particlesArray = DataProcessJSON.randomizeParticles(userInput.maxParticles, viewerParameters)
+        }
+        else if(type == "EPAK"){
+            particlesArray = DataProcessEPAK.randomizeParticles(userInput.maxParticles, viewerParameters)
         }
         var zeroArray = new Float32Array(4 * userInput.maxParticles).fill(0);
 
@@ -1096,8 +1400,8 @@ class Wind3D {
         this.globeBoundingSphere = new Cesium.BoundingSphere(Cesium.Cartesian3.ZERO, 0.99 * 6378137.0);
         this.updateViewerParameters();
 
-        let extention = url.substring(url.lastIndexOf(".")+1)
-        switch (extention){
+        let extention = url.substring(url.lastIndexOf(".") + 1)
+        switch (extention) {
             case "json":
                 DataProcessJSON.loadData(url).then(
                     (data) => {
@@ -1127,12 +1431,22 @@ class Wind3D {
                         }
                     });
                 break;
-        }
+            case "epak":
+                DataProcessEPAK.loadData(url).then(
+                    (data) => {
+                        this.particleSystem = new ParticleSystem(this.scene.context, data,
+                            this.param, this.viewerParameters);
+                        this.addPrimitives();
 
+                        this.setupEventListeners();
 
-
-
-
+                        if (mode.debug) {
+                            this.debug();
+                        }
+                    }
+                )
+                break;
+            }
     }
 
     addPrimitives() {

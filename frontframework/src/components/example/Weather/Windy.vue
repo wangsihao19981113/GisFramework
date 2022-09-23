@@ -3,6 +3,7 @@
     <div style="position:absolute;z-index: 1;background-color: white">
       <el-radio v-model="url" label="/WindyData/demo.nc">NC</el-radio>
       <el-radio v-model="url" label="/WindyData/wind.json">JSON</el-radio>
+      <el-radio v-model="url" label="/WindyData/wind0923.epak">EPAK</el-radio>
     </div>
     <CesiumBaseView></CesiumBaseView>
   </div>
@@ -44,6 +45,10 @@ export default {
         this.url,
         window.viewer
     );
+    // this.$axios.get("/WindyData/wind.epak",{ responseType: 'arraybuffer' }).then(function (response){
+    //   let data = decoder.decodeEpak(response.data);
+    //   debugger;
+    // })
   },
   watch:{
     url:function (){

@@ -139,6 +139,11 @@ export default new Router({
             path:"/SectorShape",
             name:"SectorShape",
             component:resolve => require(['@/components/example/Figure/SectorShape'], resolve)
+        },
+        {
+            path:"/OSGBLoad",
+            name:"OSGBLoad",
+            component:resolve => require(['@/components/example/DataLoad/OSGBLoad'], resolve)
         }
     ]
 })
