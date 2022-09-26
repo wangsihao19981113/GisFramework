@@ -423,7 +423,7 @@ var DataProcessNC = (function () {
 var DataProcessJSON = (function () {
     var data;
 
-    var loadNetCDF = function (filePath) {
+    var loadNetCDF = function (filePath,params) {
         return new Promise(function (resolve) {
             var request = new XMLHttpRequest();
             request.open('GET', filePath);
@@ -448,14 +448,14 @@ var DataProcessJSON = (function () {
                 let arrayU = []
                 for(let i = header.ny-1 ; i >= 0 ; i--){
                     for(let j = 0 ; j < header.nx ; j++){
-                        arrayU.push(a[0].data[i*header.nx + j])
+                        arrayU.push(a[0].data[i*header.nx + j] * params.lengthMultiplier)
                     }
                 }
 
                 let arrayV = []
                 for(let i = header.ny-1 ; i >= 0 ; i--){
                     for(let j = 0 ; j < header.nx ; j++){
-                        arrayV.push(a[1].data[i*header.nx + j])
+                        arrayV.push(a[1].data[i*header.nx + j] * params.lengthMultiplier)
                     }
                 }
 
@@ -464,7 +464,6 @@ var DataProcessJSON = (function () {
                 data["V"] = {array:new Float32Array(arrayV) , min: Math.min(...arrayV) , max: Math.max(...arrayV)};
                 data["dimensions"] = { lon:header.nx, lat:header.ny, lev:1};
                 data["lev"] = {array:new Float32Array([1]) , min : 1 , max : 1};
-                debugger
                 type = "JSON"
 
                 resolve(data);
@@ -474,9 +473,9 @@ var DataProcessJSON = (function () {
         });
     }
 
-    var loadData = async function (url) {
+    var loadData = async function (url,params) {
         var JSONFilePath = url;
-        await loadNetCDF(JSONFilePath);
+        await loadNetCDF(JSONFilePath,params);
         return data;
     }
 
@@ -500,7 +499,7 @@ var DataProcessJSON = (function () {
 var DataProcessEPAK = (function () {
     var data;
 
-    var loadNetCDF = function (filePath) {
+    var loadNetCDF = function (filePath , params) {
         return new Promise(function (resolve) {
             var request = new XMLHttpRequest();
             request.responseType = "arraybuffer";
@@ -509,7 +508,6 @@ var DataProcessEPAK = (function () {
             request.onload = function () {
                 let a = decoder.decodeEpak(request.response);
                 data = {}
-                debugger
 
                 let latConfig = (a.header.variables.lat || a.header.variables.latitude).sequence;
                 let array = [];
@@ -527,30 +525,41 @@ var DataProcessEPAK = (function () {
                 }
                 data["lon"] = {array:new Float32Array(array).sort(),min:Math.min(...array),max:Math.max(...array)}
 
-                // let arrayU = new Float32Array(a.blocks[0]);
-                // let arrayV = new Float32Array(a.blocks[1]);
-                // let sortU = arrayU.sort();
-                // let sortV = arrayV.sort();
-
                 let arrayU = []
-                for(let i = latConfig.size-1 ; i >= 0 ; i--){
-                    for(let j = 0 ; j < lonConfig.size ; j++){
-                        arrayU.push(a.blocks[0][i*lonConfig.size + j])
+                for(let x = latConfig.size-1 ; x >= 0 ; x--){
+                    for(let y = 0 ; y < lonConfig.size ; y++){
+                        if(a.blocks[0][x*lonConfig.size + y] == a.blocks[0][x*lonConfig.size + y])
+                        {
+                            arrayU.push(a.blocks[0][x*lonConfig.size + y] * params.lengthMultiplier)
+                        }
+                        else{
+                            arrayU.push(0)
+                        }
                     }
                 }
 
                 let arrayV = []
-                for(let i = latConfig.size-1 ; i >= 0 ; i--){
-                    for(let j = 0 ; j < lonConfig.size ; j++){
-                        arrayV.push(a.blocks[1][i*lonConfig.size + j])
+                for(let z = latConfig.size-1 ; z >= 0 ; z--){
+                    for(let n = 0 ; n < lonConfig.size ; n++){
+                        if(a.blocks[1][z*lonConfig.size + n] == a.blocks[1][z*lonConfig.size + n]) {
+                            arrayV.push(a.blocks[1][z * lonConfig.size + n] * params.lengthMultiplier)
+                        }
+                        else{
+                            arrayV.push(0)
+                        }
                     }
                 }
 
-                data["U"] = {array:new Float32Array(arrayU) , min: Math.min(...arrayU) , max: Math.max(...arrayU)};
-                data["V"] = {array:new Float32Array(arrayV) , min: Math.min(...arrayV) , max: Math.max(...arrayV)};
+                //排序
+                let Float32U = new Float32Array(arrayU);
+                let Float32V = new Float32Array(arrayV);
+                Float32U.sort();
+                Float32V.sort();
+
+                data["U"] = {array:new Float32Array(arrayU) , min: Float32U[0] , max: Float32U[Float32U.length - 1]};
+                data["V"] = {array:new Float32Array(arrayV) , min: Float32V[0] , max: Float32V[Float32V.length - 1]};
                 data["dimensions"] = { lon:(a.header.dimensions.lon || a.header.dimensions.longitude).length , lat:(a.header.dimensions.lat || a.header.dimensions.latitude).length, lev:1};
                 data["lev"] = {array:new Float32Array([1]) , min : 1 , max : 1};
-                debugger
                 type = "EPAK"
 
                 resolve(data);
@@ -560,9 +569,9 @@ var DataProcessEPAK = (function () {
         });
     }
 
-    var loadData = async function (url) {
+    var loadData = async function (url , params) {
         var JSONFilePath = url;
-        await loadNetCDF(JSONFilePath);
+        await loadNetCDF(JSONFilePath , params);
         return data;
     }
 
@@ -1403,7 +1412,7 @@ class Wind3D {
         let extention = url.substring(url.lastIndexOf(".") + 1)
         switch (extention) {
             case "json":
-                DataProcessJSON.loadData(url).then(
+                DataProcessJSON.loadData(url,this.param).then(
                     (data) => {
                         this.particleSystem = new ParticleSystem(this.scene.context, data,
                             this.param, this.viewerParameters);
@@ -1432,7 +1441,7 @@ class Wind3D {
                     });
                 break;
             case "epak":
-                DataProcessEPAK.loadData(url).then(
+                DataProcessEPAK.loadData(url , this.param).then(
                     (data) => {
                         this.particleSystem = new ParticleSystem(this.scene.context, data,
                             this.param, this.viewerParameters);
