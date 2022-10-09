@@ -427,7 +427,6 @@ var DataProcessJSON = (function () {
         return new Promise(function (resolve) {
             var request = new XMLHttpRequest();
             request.open('GET', filePath);
-
             request.onload = function () {
                 data = {}
                 let a = JSON.parse(request.response);
@@ -458,17 +457,14 @@ var DataProcessJSON = (function () {
                         arrayV.push(a[1].data[i*header.nx + j] * params.lengthMultiplier)
                     }
                 }
-
                 data["lon"] = {array:new Float32Array(array),min:header.lo1,max:header.lo2};
                 data["U"] = {array:new Float32Array(arrayU) , min: Math.min(...arrayU) , max: Math.max(...arrayU)};
                 data["V"] = {array:new Float32Array(arrayV) , min: Math.min(...arrayV) , max: Math.max(...arrayV)};
                 data["dimensions"] = { lon:header.nx, lat:header.ny, lev:1};
                 data["lev"] = {array:new Float32Array([1]) , min : 1 , max : 1};
                 type = "JSON"
-
                 resolve(data);
             };
-
             request.send();
         });
     }

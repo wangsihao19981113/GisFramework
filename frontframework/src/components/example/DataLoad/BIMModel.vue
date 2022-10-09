@@ -9,7 +9,7 @@ export default {
   components: {CesiumBaseView},
   mounted() {
     let tileset = window.viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
-      url: '/3dtiles/3dtiles2/tileset.json'
+      url: '/datasource/567/tileset.json'
     }));
     window.viewer.zoomTo(tileset);
     window.viewer.scene.screenSpaceCameraController.enableCollisionDetection = false
