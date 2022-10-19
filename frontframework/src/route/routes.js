@@ -129,16 +129,23 @@ export default new Router({
             name:"OceanWater",
             component:resolve => require(['@/components/example/WaterWithThreejs/OceanWater'], resolve)
         },
-        //
+        //风场
         {
             path:"/Windy",
             name:"Windy",
             component:resolve => require(['@/components/example/Weather/Windy'], resolve)
         },
+        //扇形
         {
             path:"/SectorShape",
             name:"SectorShape",
             component:resolve => require(['@/components/example/Figure/SectorShape'], resolve)
+        },
+        //卷帘
+        {
+            path:"/RollerShutter",
+            name:"RollerShutter",
+            component:resolve => require(['@/components/example/SplitScreen/RollerShutter'], resolve)
         }
     ]
 })
