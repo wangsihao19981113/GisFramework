@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="MySQL - gisdatabase@localhost" uuid="a697ca7a-4409-4549-9b8e-0cb2ba111319">
+    <data-source source="LOCAL" name="gisdatabase@localhost" uuid="7d87b0e7-7990-4903-9f4d-a7e0df3da546">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

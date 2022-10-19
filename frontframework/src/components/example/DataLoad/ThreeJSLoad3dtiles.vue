@@ -151,7 +151,7 @@ export default {
         this.offsetGroup.rotateX(45)
         window.offsetGroup = this.offsetGroup;
         this.scene.add( this.offsetGroup );
-        const qzpath = '/3dtiles/3dtiles2/'
+        const qzpath = '/datasource/3dtiles2/'
         let self = this;
         this.$axios.get(qzpath + 'tileset.json').then((res)=>{
           // console.log(res)

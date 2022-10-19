@@ -10,6 +10,7 @@
 import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import {Water} from "three/examples/jsm/objects/Water";
+import {Sky} from "three/examples/jsm/objects/Sky";
 var scene = null;
 export default {
   name: "ThreeJSContainer",
@@ -135,47 +136,19 @@ export default {
         this.water.material.uniforms['time'].value += 1.0 / 10.0;
       }
     },
-    // addGeometry(){
-    //   let geometry = new THREE.SphereGeometry(1, 32, 32);
-    //   let sphere = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xFFFF00, side: THREE.DoubleSide }));   //12面体
-    //   // sphere.scale.set(5000,5000,5000);
-    //   // sphere.position.z+=15000;
-    //   // translate "up" in Three.js space so the "bottom" of the mesh is the handle
-    //   let position = Cesium.Cartesian3.fromDegrees(112,23,0);
-    //   sphere.scale.set(5000,5000,5000);
-    //   sphere.uuid = "sphere";
-    //   var sphereYup = new THREE.Group();
-    //   sphereYup.add(sphere)
-    //   scene.add(sphereYup);
-    //   sphereYup.position.set(position.x, position.y, position.z);
-    // },
-    addWater(){
-      const waterGeometry = new THREE.PlaneGeometry( 10000, 10000 );
-      this.water = new Water(
-          waterGeometry,
-          {
-            textureWidth: 512,
-            textureHeight: 512,
-            waterNormals: new THREE.TextureLoader().load( '/Image/Example/WaterStyle/WaterNormals.jpg', function ( texture ) {
-              texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-            } ),
-            sunDirection: new THREE.Vector3(),
-            sunColor: 0xffffff,
-            waterColor: 0x001e0f,
-            distortionScale: 3.7,
-            fog: scene.fog !== undefined
-          }
-      );
-
-      this.water.rotation.x = - Math.PI / 2;
+    addGeometry(){
+      let geometry = new THREE.SphereGeometry(1, 32, 32);
+      let sphere = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xFFFF00, side: THREE.DoubleSide }));   //12面体
+      // sphere.scale.set(5000,5000,5000);
+      // sphere.position.z+=15000;
+      // translate "up" in Three.js space so the "bottom" of the mesh is the handle
       let position = Cesium.Cartesian3.fromDegrees(112,23,0);
-      this.water.position.set(position.x, position.y, position.z);
-      scene.add(this.water);
-
-      let spotLight = new THREE.SpotLight(0xFFFFFF);
-      position = Cesium.Cartesian3.fromDegrees(112,23,1000);
-      spotLight.position.set(position.x, position.y, position.z);
-      scene.add(spotLight)
+      sphere.scale.set(5000,5000,5000);
+      sphere.uuid = "sphere";
+      var sphereYup = new THREE.Group();
+      sphereYup.add(sphere)
+      scene.add(sphereYup);
+      sphereYup.position.set(position.x, position.y, position.z);
     },
     renderCamera() {
       // register Three.js scene with Cesium
@@ -213,8 +186,7 @@ export default {
     this.initThree()
     this.initCesium()
     this.render()
-    // this.addGeometry()
-    this.addWater()
+    this.addGeometry()
   },
   components: {}
 }
