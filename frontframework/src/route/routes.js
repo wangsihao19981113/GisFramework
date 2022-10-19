@@ -143,9 +143,33 @@ export default new Router({
         },
         //卷帘
         {
-            path:"/RollerShutter",
-            name:"RollerShutter",
-            component:resolve => require(['@/components/example/SplitScreen/RollerShutter'], resolve)
+            path: "/RollerShutter",
+            name: "RollerShutter",
+            component: resolve => require(['@/components/example/SplitScreen/RollerShutter'], resolve)
+        },
+        //加载OSGB
+        {
+            path:"/OSGBLoad",
+            name:"OSGBLoad",
+            component:resolve => require(['@/components/example/DataLoad/OSGBLoad'], resolve)
+        },
+        //模型剖面视图
+        {
+            path:"/SectionView",
+            name:"SectionView",
+            component:resolve => require(['@/components/example/SceneEffect/SectionView'],resolve)
+        },
+        //云层
+        {
+            path:"/Cloudy",
+            name:"Cloudy",
+            component:resolve => require(['@/components/example/Weather/Cloudy'],resolve)
+        },
+        //GeoServer管理
+        {
+            path:"/GeoserverManager",
+            name:"GeoserverManager",
+            component:resolve => require(['@/components/example/GeoserverManager/GeoserverManager'],resolve)
         }
     ]
 })

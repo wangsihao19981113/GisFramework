@@ -9,6 +9,8 @@
 //Ceisum和Threejs相机融合
 import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import {Water} from "three/examples/jsm/objects/Water";
+import {Sky} from "three/examples/jsm/objects/Sky";
 var scene = null;
 export default {
   name: "ThreeJSContainer",
@@ -130,6 +132,9 @@ export default {
       requestAnimationFrame(this.render)
       this.renderCamera();
       this.renderer.render(scene, this.camera);
+      if(this.water) {
+        this.water.material.uniforms['time'].value += 1.0 / 10.0;
+      }
     },
     addGeometry(){
       let geometry = new THREE.SphereGeometry(1, 32, 32);

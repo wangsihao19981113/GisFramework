@@ -7,9 +7,10 @@ function addwater(viewer,polygons)
                 baseWaterColor: new Cesium.Color(89 / 255, 148 / 255, 236 / 255, 0.5), //底色
                 blendColor: new Cesium.Color(0.5, 1.0, 0.699, 0.5),
                 normalMap: "/Image/Example/WaterStyle/waterNormals.jpg",
-                frequency: 500.0,
+                frequency: 1000.0,
                 animationSpeed: 0.05,
-                amplitude: 2.0
+                amplitude: 2.0,
+                specularIntensity:2
             },
             fragmentShaderSource: 'varying vec3 v_positionMC;\n\
                 varying vec3 v_positionEC;\n\

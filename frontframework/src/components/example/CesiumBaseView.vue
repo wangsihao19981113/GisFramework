@@ -38,8 +38,12 @@ export default {
       // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
       //   url: 'http://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer',
       // }),
-      imageryProvider: new Cesium.UrlTemplateImageryProvider({
-        url: 'https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}'
+      // imageryProvider: new Cesium.UrlTemplateImageryProvider({
+      //   url: 'https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}'
+      // }),
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url:
+            "https://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/",
       }),
       //用于截屏
       contextOptions: {

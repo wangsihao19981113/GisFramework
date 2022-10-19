@@ -104,18 +104,6 @@ let config = [
         name:"点样式",
         id:"el_1_3",
         third:[
-          {
-            name:"上升线",
-            img:"/Image/img.png"
-          },
-          {
-            name:"上升线",
-            img:"/Image/img.png"
-          },
-          {
-            name:"上升线",
-            img:"/Image/img.png"
-          }
         ]
       }
     ]
@@ -161,8 +149,23 @@ let config = [
           },
           {
             name:"threejs加载3dtile(相机融合)",
-            img:"Image/Example/DataLoad/ThreeJSLoad3dtiles.png",
+            img:"/Image/Example/DataLoad/ThreeJSLoad3dtiles.png",
             url:"/ThreeJSLoad3dtiles"
+          },
+          {
+            name:"shapefile数据",
+            img:"/Image/Example/DataLoad/ShapeFile.png",
+            url:"/Shapefile"
+          },
+          {
+            name:"倾斜摄影数据",
+            img:"/Image/Example/DataLoad/OSGBLoad.png",
+            url:"/OSGBLoad"
+          },
+          {
+            name:"BIM模型数据",
+            img:"/Image/Example/DataLoad/BIMModel.png",
+            url:"/BIMModel"
           }
         ]
       },]
@@ -180,6 +183,11 @@ let config = [
             img:"/Image/Example/SceneEffect/Shadow.png",
             url:"/Shadow"
           },
+          {
+            name:"模型剖面",
+            img:"/Image/Example/SceneEffect/SectionView.png",
+            url:"/SectionView"
+          }
         ]
       },
       {
