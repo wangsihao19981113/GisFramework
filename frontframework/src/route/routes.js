@@ -170,6 +170,12 @@ export default new Router({
             path:"/GeoserverManager",
             name:"GeoserverManager",
             component:resolve => require(['@/components/example/GeoserverManager/GeoserverManager'],resolve)
+        },
+        //等值线
+        {
+          path:"/Isopleth",
+          name:"Isopleth",
+          component:resolve => require(['@/components/example/Isopleth/IsoplethMap'],resolve)
         }
     ]
 })
