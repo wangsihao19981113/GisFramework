@@ -24,6 +24,7 @@ Vue.prototype.localhostPath = window.location.origin;
 
 
 
+
 new Vue({
   axios,
   store,

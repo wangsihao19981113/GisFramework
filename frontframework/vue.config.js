@@ -13,10 +13,17 @@ module.exports = defineConfig({
         }
       },
       '/datasource':{
-        target: 'http://localhost:6969',
+        target: 'http://192.168.1.83:6969',
         changeOrigin: true,
         pathRewrite: {
           '^/datasource': ''
+        }
+      },
+      '/geoserverAddress':{
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/geoserverAddress': ''
         }
       }
     }

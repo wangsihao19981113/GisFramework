@@ -176,6 +176,93 @@ export default new Router({
           path:"/Isopleth",
           name:"Isopleth",
           component:resolve => require(['@/components/example/Isopleth/IsoplethMap'],resolve)
+        },
+        //可视域分析
+        {
+            path:"/Viewshed",
+            name:"Viewshed",
+            component:resolve => require(['@/components/example/Analysis/Viewshed'],resolve)
+        },
+        //水淹分析
+        {
+            path:"/Flooding",
+            name:"Flooding",
+            component:resolve => require(['@/components/example/Analysis/Flooding'],resolve)
+        },
+        //测量工具
+        {
+            path:"/MeasureTool",
+            name:"MeasureTool",
+            component:resolve => require(['@/components/example/Measure/Measure'],resolve)
+        },
+        //通视分析
+        {
+            path:"/AnalysisVisible",
+            name:"AnalysisVisible",
+            component:resolve => require(['@/components/example/Analysis/AnalysisVisible'],resolve)
+        },
+        //等高线分析
+        {
+            path:"/ContourAnalysis",
+            name:"ContourAnalysis",
+            component:resolve => require(['@/components/example/Analysis/ContourAnalysis'],resolve)
+        },
+        //模型变换
+        {
+            path:"/ModelTranslation",
+            name:"ModelTranslation",
+            component:resolve => require(['@/components/example/Analysis/ModelTranslation'],resolve)
+        },
+        //注记集合
+        {
+            path: "/LabelCollection",
+            name: "LabelCollection",
+            component: resolve => require(['@/components/example/Primitive/LabelCollection'], resolve)
+        },
+        //图元要素聚类
+        {
+            path:"/PrimitiveCluster",
+            name:"PrimitiveCluster",
+            component:resolve => require(['@/components/example/Primitive/PrimitiveCluster'],resolve)
+        },
+        //缓冲区分析
+        {
+            path:"/BufferAnalysis",
+            name:"BufferAnalysis",
+            component:resolve => require(['@/components/example/Analysis/BufferAnalysis'],resolve)
+        },
+        //烟花
+        {
+            path:"/Firework",
+            name:"Firework",
+            component:resolve => require(['@/components/example/ParticleSystem/Firework'],resolve)
+        },
+        //火焰
+        {
+            path:"/Flame",
+            name:"Flame",
+            component:resolve => require(['@/components/example/ParticleSystem/Flame'],resolve)
+        },
+        //爆炸
+        {
+            path:"/Explot",
+            name:"Explot",
+            component:resolve => require(['@/components/example/ParticleSystem/Explot'],resolve)
+        },
+        //挖填方分析
+        {
+            path: "/CutFillAnalysis",
+            component: resolve => require(['@/components/example/Analysis/CutFillAnalysis'], resolve)
+        },
+        //地形裁剪
+        {
+            path:"/TerrainClipAnalysis",
+            component: resolve => require(['@/components/example/Analysis/TerrainClipAnalysis'], resolve)
+        },
+        //地形加载
+        {
+            path:"/TerrainLoad",
+            component: resolve => require(['@/components/example/DataLoad/Terrain'], resolve)
         }
     ]
 })

@@ -91,15 +91,15 @@ let config = [
         third:[
           {
             name:"上升线",
-            img:"/Image/img.png"
+            img:"/Image/fire.png"
           },
           {
             name:"上升线",
-            img:"/Image/img.png"
+            img:"/Image/fire.png"
           },
           {
             name:"上升线",
-            img:"/Image/img.png"
+            img:"/Image/fire.png"
           }
         ]
       }

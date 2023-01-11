@@ -1,16 +1,32 @@
 <template>
-  <CesiumBaseView></CesiumBaseView>
+  <div>
+    <div style="position:absolute;z-index: 100">
+      <el-button @click="start">开始</el-button>
+      <el-button>清除</el-button>
+    </div>
+    <CesiumBaseView/>
+  </div>
 </template>
 
 <script>
 import CesiumBaseView from "@/components/example/CesiumBaseView";
+import SectionAnalysis from "@/lib/SectionAnalysis/SectionAnalysis";
 export default {
   name: "SectionView",
   components: {CesiumBaseView},
   mounted() {
-    this.loadTileset("/datasource/567/tileset.json");
+    this.tileset = window.viewer.scene.primitives.add(
+        new Cesium.Cesium3DTileset({
+          url: "http://earthsdk.com/v/last/Apps/assets/dayanta/tileset.json",
+        })
+    );
+
   },
   methods:{
+    start(){
+      let sa = new SectionAnalysis(window.viewer,this.tileset)
+      sa.startAnalysis()
+    },
     loadTileset(url) {
       let viewer = window.viewer;
       let scene = viewer.scene;
@@ -82,9 +98,10 @@ export default {
       let tileset = viewer.scene.primitives.add(
           new Cesium.Cesium3DTileset({
             url: url,
-            clippingPlanes: clippingPlanes,
           })
       );
+
+      tileset.clippingPlanes = clippingPlanes;
 
       tileset.debugShowBoundingVolume =
           viewModel.debugBoundingVolumesEnabled;
@@ -142,8 +159,6 @@ export default {
                   outlineColor: Cesium.Color.RED,
                 },
               });
-
-              planeEntities.push(planeEntity);
             }
             return tileset;
           })

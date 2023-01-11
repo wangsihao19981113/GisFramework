@@ -55,7 +55,6 @@ export default {
     viewer.cesiumWidget.creditContainer.style.display = "none"
     window.viewer = viewer;
     WallDiffuseMaterialProperty.addWallDiffuseMaterial();
-    debugger;
     viewer.entities.add({
       name: "立体墙效果",
       wall: {
@@ -110,6 +109,48 @@ export default {
         material : Cesium.Material.fromType('Stripe')
       })
     }));
+
+
+
+    let imageryProvider = new Cesium.WebMapServiceImageryProvider({
+      url : 'http://127.0.0.1:8080/geoserver/cite/wms',
+      layers : 'cite:waterdeepline30_4326',
+      // srs:"EPSG:3857",
+      // tilingScheme:new Cesium.WebMercatorTilingScheme(),
+      parameters: {
+        service : 'WMS',
+        format: 'image/png',
+        transparent: true,
+      }
+    })
+
+
+    // let imageryProvider = new Cesium.WebMapTileServiceImageryProvider({
+    //   url:"http://localhost:8080/geoserver/gwc/service/wmts/rest/cite:waterdeepline30/{style}/{TileMatrixSet}/{TileMatrixSet}:{TileMatrix}/{TileRow}/{TileCol}?format=image/png",
+    //   layer: "cite:waterdeepline30",
+    //   style: "line",
+    //   format: "image/png",
+    //   tileMatrixSetID:"EPSG:4326",
+    //   maximumLevel: 20
+    // })
+
+    let layer = viewer.imageryLayers.addImageryProvider(imageryProvider)
+
+
+    let imageryProvider1 = new Cesium.WebMapServiceImageryProvider({
+      url : 'http://127.0.0.1:8080/geoserver/cite/wms',
+      layers : 'cite:point5',
+      // srs:"EPSG:3857",
+      // tilingScheme:new Cesium.WebMercatorTilingScheme(),
+      parameters: {
+        service : 'WMS',
+        format: 'image/png',
+        transparent: true,
+      }
+    })
+
+    viewer.imageryLayers.addImageryProvider(imageryProvider1)
+
 
 
     // var IconOnGroundConfig = {
