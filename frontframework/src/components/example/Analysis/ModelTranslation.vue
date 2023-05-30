@@ -16,7 +16,7 @@ export default {
   components: {CesiumBaseView},
   mounted() {
     let viewer = window.viewer;
-    this.createModel("http://localhost:8888/Model/风力机8.gltf",10,20,45,0,viewer)
+    this.createModel("http://localhost:8888/Model/car.glb",10,20,45,0,viewer)
   },
   methods:{
     createModel(url, height, heading, pitch, roll,viewer) {

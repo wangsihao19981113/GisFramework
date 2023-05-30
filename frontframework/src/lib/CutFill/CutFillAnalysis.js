@@ -122,6 +122,8 @@ class CutFillAnalysis{
         CutAndFillResult.fillVolume = totalFillVolume;
         CutAndFillResult.baseArea = totalBottomArea;
 
+        return CutAndFillResult
+
     }
 
     computeAreaOfTriangle = function (pos1, pos2, pos3) {

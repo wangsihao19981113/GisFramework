@@ -6,7 +6,7 @@ export default new Router({
     mode:'history',
     routes: [
         {
-            path: '/home',
+            path: '/',
             name: 'home',
             component: resolve => require(['@/components/home/HomePage'], resolve),
             children: [
@@ -15,7 +15,6 @@ export default new Router({
                 { path: 'register', component: () => import('@/components/home/HelloWorld.vue') }
             ]
         },
-        //例子总览面板
         {
             path: '/example',
             name: 'example',
@@ -69,12 +68,6 @@ export default new Router({
             name:'Shadow',
             component:resolve => require(['@/components/example/SceneEffect/Shadow'], resolve)
         },
-        //倒影（半废弃）
-        {
-            path:'/InvertedEffect',
-            name:'InvertedEffect',
-            component:resolve => require(['@/components/example/Mars3d/InvertedEffect'], resolve)
-        },
         //gif点样式
         {
             path:'/GifPoint',
@@ -123,12 +116,6 @@ export default new Router({
             name:"ModelAdjustment",
             component:resolve => require(['@/components/example/CesiumWithThreeJS/ModelAdjustment'], resolve)
         },
-        //
-        {
-            path:"/OceanWater",
-            name:"OceanWater",
-            component:resolve => require(['@/components/example/WaterWithThreejs/OceanWater'], resolve)
-        },
         //风场
         {
             path:"/Windy",
@@ -158,18 +145,6 @@ export default new Router({
             path:"/SectionView",
             name:"SectionView",
             component:resolve => require(['@/components/example/SceneEffect/SectionView'],resolve)
-        },
-        //云层
-        {
-            path:"/Cloudy",
-            name:"Cloudy",
-            component:resolve => require(['@/components/example/Weather/Cloudy'],resolve)
-        },
-        //GeoServer管理
-        {
-            path:"/GeoserverManager",
-            name:"GeoserverManager",
-            component:resolve => require(['@/components/example/GeoserverManager/GeoserverManager'],resolve)
         },
         //等值线
         {
@@ -263,6 +238,16 @@ export default new Router({
         {
             path:"/TerrainLoad",
             component: resolve => require(['@/components/example/DataLoad/Terrain'], resolve)
-        }
+        },
+        //shape编辑器
+        {
+            path:"/ShapefileEdit",
+            component: resolve => require(['@/components/example/ShapeFileEdit/ShapefileEdit'], resolve)
+        },
+        //贴地图片
+        {
+            path:"/ImageOnGround",
+            component: resolve => require(['@/components/example/Primitive/ImageOnGround'], resolve)
+        },
     ]
 })

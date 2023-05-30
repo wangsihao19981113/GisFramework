@@ -410,7 +410,7 @@ export default class WaterPrimitive {
         this._initUniforms = {
             normalMapUrl: Cesium.defaultValue(
                 options.normalMapUrl,
-                "/image/waterNormals.jpg"
+                "/Image/Example/WaterStyle/waterNormals.jpg"
             ),
             size: Cesium.defaultValue(options.rippleSize, 50.0),
             waterColor: Cesium.defaultValue(

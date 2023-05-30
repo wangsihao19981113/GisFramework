@@ -6,28 +6,13 @@
           <el-menu
               default-active="2"
               class="el-menu-vertical-demo">
-<!--            <el-submenu index="1">-->
-<!--              <template slot="title">-->
-<!--                <i class="el-icon-location"></i>-->
-<!--                <span>导航一</span>-->
-<!--              </template>-->
-<!--              <el-menu-item index="1-1">选项1</el-menu-item>-->
-<!--              <el-menu-item index="1-2">选项2</el-menu-item>-->
-<!--              <el-menu-item index="1-3">选项3</el-menu-item>-->
-<!--            </el-submenu>-->
-<!--            <el-submenu index="2">-->
-<!--              <template slot="title">-->
-<!--                <i class="el-icon-location"></i>-->
-<!--                <span>导航二</span>-->
-<!--              </template>-->
-<!--            </el-submenu>-->
             <el-submenu v-for="(first,index) in config" :key="index" :index="first.id">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>{{first.name}}</span>
               </template>
-              <el-menu-item  v-for="(second,i) in first.second" :key="i" :index="second.id">
-                <a :href="'#'+second.id">{{second.name}}</a>
+              <el-menu-item @click="changeItem(second.id)"  v-for="(second,i) in first.second" :key="i" :index="second.id">
+                <a>{{second.name}}</a>
               </el-menu-item>
             </el-submenu>
           </el-menu>
@@ -94,7 +79,7 @@ let config = [
         id:"el_1_2",
         third:[
           {
-            name:"水面",
+            name:"水面（带倒影）",
             img:"/Image/Example/WaterStyle/WaterNormal.png",
             url:"/WaterNormal"
           },
@@ -168,7 +153,19 @@ let config = [
             url:"/BIMModel"
           }
         ]
-      },]
+      },
+      {
+        name:"基础工具",
+        id:"BaseTool",
+        third:[
+          {
+            name:"测量工具",
+            img:"/Image/Example/Measure/MeasureTool.png",
+            url:"/MeasureTool"
+          },
+        ]
+      },
+    ]
   },
   {
     name:"场景",
@@ -192,7 +189,7 @@ let config = [
       },
       {
         name:"气象",
-        id:"SceneEffect",
+        id:"Weather",
         third:[
           {
             name:"风场",
@@ -239,6 +236,9 @@ export default {
       if(url){
         window.open(this.localhostPath+url)
       }
+    },
+    changeItem(id){
+      window.location.href= "#"+id
     }
   },
 }
@@ -256,7 +256,7 @@ export default {
 
 .ExamplePage .NavBar{
   height: 100%;
-  width: 12%;
+  width: 200px;
 }
 .ExamplePage .Viewer{
   width: 88%;

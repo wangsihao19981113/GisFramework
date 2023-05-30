@@ -9,11 +9,12 @@ export default {
   components: {CesiumBaseView},
   mounted() {
     var terrainProvider = new Cesium.CesiumTerrainProvider({
-          url:"/Terrian/terrian1",
+          url:"/Terrian/3",
           minimumLevel: 0,
-          maximumLevel: 15,
+          maximumLevel: 20,
     })
     window.viewer.terrainProvider = terrainProvider;
+    window.viewer.scene.globe.terrainExaggeration = 20.0;
     window.viewer.camera.flyTo({
       destination : new Cesium.Cartesian3(-1970916.2392285925,5672354.868838107, 2148668.14359599),
       orientation : {

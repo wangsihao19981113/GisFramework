@@ -73,6 +73,7 @@ class SectionAnalysis{
         });
 
         tileset.clippingPlanes = clippingPlanes;
+        this.clippingPlanes = clippingPlanes;
 
         tileset.debugShowBoundingVolume =
             viewModel.debugBoundingVolumesEnabled;
@@ -136,7 +137,14 @@ class SectionAnalysis{
             .catch(function (error) {
                 console.log(error);
             });
+    }
 
+    remove(){
+        let viewer = this.viewer;
+        viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOWN);
+        viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_UP);
+        this.clippingPlanes.removeAll()
     }
 
 }

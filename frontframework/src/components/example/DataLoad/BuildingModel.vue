@@ -10,14 +10,12 @@ export default {
   mounted() {
     // 加载3D Tiles
     let tileset = window.viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
-      url: '/3dtiles/building/tileset.json'
+      url: '/3dtiles/PSMODEL/tileset.json'
     }));
-
     // 聚焦
     window.viewer.zoomTo(tileset);
-
-
   }
+
 }
 </script>
 

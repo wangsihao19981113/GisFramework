@@ -823,7 +823,7 @@ class Measure {
                 let area = $this.getPositionsArea($this.transformCartesianArrayToWGS84Array(positions));
 
                 _labelEntity.label = {
-                    text: area > 1000000 ? (( area / 1000000.0).toFixed(4) + '平方公里') : (area.toFixed(4) + '平方米'),
+                    text: area > 1000000 ? (( area / 1000000.0).toFixed(4) + '平方公里') : ((area*1).toFixed(4) + '平方米'),
                     show: true,
                     showBackground: true,
                     font: '14px monospace',

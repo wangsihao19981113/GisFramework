@@ -13,7 +13,6 @@ export default {
     var viewer = new Cesium.Viewer("cesiumContainer", {
       infoBox: false, //是否显示信息框
       selectionIndicator: false, //是否显示选取指示器组件
-      scene3DOnly: true, //如果设置为true，则所有几何图形以3D模式绘制以节约GPU资源
       geocoder: false,   // 位置查找工具
       homeButton: false,  // 视角返回初始位置
       sceneModePicker: false,   // 选择视角的模式（球体、平铺、斜视平铺）
@@ -22,18 +21,15 @@ export default {
       animation: false,   // 左下角仪表盘（动画器件）
       timeline: false,   // 底部时间线
       fullscreenButton: false,   // 全屏
-      vrButton: false,  // VR
       shouldAnimate: true,
-      credits: false,
       showRenderLoopErrors: true,
-      // terrainExaggeration: 1,
       //天地图
-      // imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
-      //   id:"tianditu",
-      //   //http://t0.tianditu.gov.cn/vec_w
-      //   url:"http://t0.tianditu.gov.cn/vec_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=vec&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=3936357f969edfea7547fda751cf1473",
-      //   style: "default",
-      //   format: "image/jpeg",
+      imageryProvider: new Cesium.UrlTemplateImageryProvider({
+        id:"tianditu",
+        url:"http://t0.tianditu.gov.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles&tk=3936357f969edfea7547fda751cf1473"
+      }),
+      // imageryProvider: new Cesium.UrlTemplateImageryProvider({
+      //   url:"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
       // }),
       // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
       //   url: 'http://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer',
@@ -41,23 +37,11 @@ export default {
       // imageryProvider: new Cesium.UrlTemplateImageryProvider({
       //   url: 'https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}'
       // }),
-      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
-        url:
-            "https://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/",
-      }),
+      // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+      //   url:
+      //       "https://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/",
+      // }),
       //用于截屏
-      contextOptions: {
-        webgl:{
-          alpha: true,
-          depth:true,
-          stencil:true,
-          antialias:true,
-          premultipliedAlpha:true,
-          //通过canvas.toDataURL()实现截图需要将该项设置为true
-          preserveDrawingBuffer:true,
-          failIfMajorPerformanceCaveat:true
-        }
-      }
     });
     viewer.cesiumWidget.creditContainer.style.display = "none";
     window.viewer = viewer;

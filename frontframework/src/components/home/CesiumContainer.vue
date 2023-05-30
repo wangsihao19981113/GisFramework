@@ -94,7 +94,6 @@ export default {
     //ScanPostStage.addCircleScan(viewer,data)
 
 
-
     var instance = new Cesium.GeometryInstance({
       geometry : new Cesium.RectangleGeometry({
         rectangle : Cesium.Rectangle.fromDegrees(-100.0, 20.0, -90.0, 30.0),

@@ -7,13 +7,10 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <link rel="stylesheet" href="<%= BASE_URL %>iconfont/iconfont.css">
     <title><%= htmlWebpackPlugin.options.title %></title>
-      <script src="<%= BASE_URL %>Cesium1.7/Build/Cesium/Cesium.js"></script>
-      <style>
-          @import url(/Cesium1.7/Build/Cesium/Widgets/widgets.css);
-      </style>
+      <script src="<%= BASE_URL %>cesium/Cesium.js"></script>
+      <link href="<%= BASE_URL %>cesium/Widgets/widgets.css" rel="stylesheet"/>
       <script src="<%= BASE_URL %>thirdlib/heatmap.js"></script>
       <script src="https://www.lactame.com/lib/netcdfjs/0.7.0/netcdfjs.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.6/build/dat.gui.min.js"></script>
       <script src="https://spectorcdn.babylonjs.com/spector.bundle.js"></script>
   </head>
   <body>
